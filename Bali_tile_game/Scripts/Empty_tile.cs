@@ -3,10 +3,12 @@ using System;
 
 public class Empty_tile : Tile
 {
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+    private Game_board game_board;
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
 	{
-		
+		game_board = (Game_board)GetParent();
 	}
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -25,7 +27,7 @@ public class Empty_tile : Tile
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 1)
 			{
 				GD.Print("Left Mouse button click");
-				this.Translate(new Vector3(1, 0, 0));
+				spawnTile();
 			}
 			//Right mouse button click
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 2)
@@ -34,11 +36,19 @@ public class Empty_tile : Tile
 				this.Visible = false;
 			}
 		}
+	}
 
-		if(@event is InputEventMouseMotion inputEventMouseMotion)
-		{
-			GD.Print("hovering");
-		}
+	//Spawn 6 empty tiles surrounding the clicked tile and deleting it.
+	private void spawnTile()
+	{
+		game_board.spawnTile("empty_tile", this.Translation.x + 2*game_board.tileApothem, this.Translation.z);
+		game_board.spawnTile("empty_tile", this.Translation.x - 2*game_board.tileApothem, this.Translation.z);
+		game_board.spawnTile("empty_tile", this.Translation.x + game_board.tileApothem, this.Translation.z + 1.5f);
+		game_board.spawnTile("empty_tile", this.Translation.x + game_board.tileApothem, this.Translation.z - 1.5f);
+		game_board.spawnTile("empty_tile", this.Translation.x - game_board.tileApothem, this.Translation.z + 1.5f);
+		game_board.spawnTile("empty_tile", this.Translation.x - game_board.tileApothem, this.Translation.z - 1.5f);
+
+		QueueFree();
 	}
 }
 
