@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+
 public class Game_board : Spatial
 {
 	// Declare member variables here. Examples:
@@ -9,6 +10,7 @@ public class Game_board : Spatial
 	PackedScene emptyTile;
 	PackedScene banana_farm_tile;
 	PackedScene rice_farm_tile;
+	float tileHeight = 1;
 
 	//With of the hexagon tile.
 	public float tileApothem = 0.866f;
@@ -19,46 +21,61 @@ public class Game_board : Spatial
 		banana_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Banana_farm_tile.tscn");
 		rice_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Rice_farm_tile.tscn");
 		
-		spawnTile("empty_tile", 0, 0);
+		spawnTile("empty_tile", hex_coordinates(0,0));
 	}
 	
-	public void spawnTile(string tile_type, float xPos, float zPos)
+	public void spawnTile(string tile_type, Vector3 position)
 	{
 		//checks if the tile type is empty tile and spawns new empty tile ar position (xPos, yPos).
-		Spatial newTile;
+		Tile newTile;
 		
 		switch (tile_type)
 		{
 			case "empty_tile":
-				newTile = (Spatial)emptyTile.Instance();
+				newTile = (Tile)emptyTile.Instance();
 				AddChild(newTile);
-				newTile.Translation = new Vector3(xPos, 0, zPos);
+				newTile.Translation = new Vector3(position.x, 0, position.z);
+				newTile.xHex = (int)position.x;
+				newTile.zHex = (int)position.z;
 				break;
 				
 			case "banana_farm_tile":
-				newTile = (Spatial)banana_farm_tile.Instance();
+				newTile = (Tile)banana_farm_tile.Instance();
 				AddChild(newTile);
-				newTile.Translation = new Vector3(xPos, 0, zPos);
+				newTile.Translation = new Vector3(position.x, 0, position.z);
+				newTile.xHex = (int)position.x;
+				newTile.zHex = (int)position.z;
 				break;
 				
 			case "rice_farm_tile":
-				newTile = (Spatial)rice_farm_tile.Instance();
+				newTile = (Tile)rice_farm_tile.Instance();
 				AddChild(newTile);
-				newTile.Translation = new Vector3(xPos, 0, zPos);
+				newTile.Translation = new Vector3(position.x, 0, position.z);
+				newTile.xHex = (int)position.x;
+				newTile.zHex = (int)position.z;
 				break;
 		}
 	}
 		//Spawn 6 empty tiles surrounding the clicked tile and deleting it.
 		
-	public void click_empty_tile(float xPos,float zPos)
+	public void click_empty_tile(int xHex,int zHex)
 	{
-		spawnTile("banana_farm_tile", xPos, zPos);
-		spawnTile("empty_tile", xPos + 2*tileApothem, zPos);
-		spawnTile("empty_tile", xPos - 2*tileApothem, zPos);
-		spawnTile("empty_tile", xPos + tileApothem, zPos + 1.5f);
-		spawnTile("empty_tile", xPos + tileApothem, zPos - 1.5f);
-		spawnTile("empty_tile", xPos - tileApothem, zPos + 1.5f);
-		spawnTile("empty_tile", xPos - tileApothem, zPos - 1.5f);
+		spawnTile("banana_farm_tile", hex_coordinates(xHex, zHex));
+//		spawnTile("empty_tile", xPos + 2*tileApothem, zPos);
+//		spawnTile("empty_tile", xPos - 2*tileApothem, zPos);
+//		spawnTile("empty_tile", xPos + tileApothem, zPos + 1.5f * tileHeight);
+//		spawnTile("empty_tile", xPos + tileApothem, zPos - 1.5f * tileHeight);
+//		spawnTile("empty_tile", xPos - tileApothem, zPos + 1.5f * tileHeight);
+//		spawnTile("empty_tile", xPos - tileApothem, zPos - 1.5f * tileHeight);
 		
 	}
+	
+	public Vector3 hex_coordinates(int hexX, int hexZ)
+	{
+		float xPos = hexX*2*tileApothem + (hexZ%2) * tileApothem ;
+		float yPos = 0;
+		float zPos = hexZ * 1.5f * tileHeight;
+		return new Vector3(xPos, yPos, zPos);
+	}
+	
 }

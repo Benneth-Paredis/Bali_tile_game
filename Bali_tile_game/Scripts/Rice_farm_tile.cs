@@ -1,15 +1,15 @@
 using Godot;
 using System;
 
-public class Farm_tile : Tile
+public class Rice_farm_tile : Tile
 {
-    public string owner;
-    
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        
-    }
+	public string owner;
+	
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		
+	}
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)

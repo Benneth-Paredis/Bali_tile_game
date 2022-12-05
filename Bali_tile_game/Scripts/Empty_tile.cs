@@ -3,7 +3,7 @@ using System;
 
 public class Empty_tile : Tile
 {
-	private Game_board game_board;
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -26,7 +26,7 @@ public class Empty_tile : Tile
 			//Left mouse button click
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 1)
 			{
-				game_board.click_empty_tile(this.Translation.x, this.Translation.z);
+				game_board.click_empty_tile(this.xHex, this.zHex);
 				QueueFree();
 			}
 			//Right mouse button click
