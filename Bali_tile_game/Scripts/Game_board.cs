@@ -53,12 +53,12 @@ public class Game_board : Spatial
 	public void click_empty_tile(float xPos,float zPos)
 	{
 		spawnTile("banana_farm_tile", xPos, zPos);
-//		game_board.spawnTile("empty_tile", this.Translation.x + 2*game_board.tileApothem, this.Translation.z);
-//		game_board.spawnTile("empty_tile", this.Translation.x - 2*game_board.tileApothem, this.Translation.z);
-//		game_board.spawnTile("empty_tile", this.Translation.x + game_board.tileApothem, this.Translation.z + 1.5f);
-//		game_board.spawnTile("empty_tile", this.Translation.x + game_board.tileApothem, this.Translation.z - 1.5f);
-//		game_board.spawnTile("empty_tile", this.Translation.x - game_board.tileApothem, this.Translation.z + 1.5f);
-//		game_board.spawnTile("empty_tile", this.Translation.x - game_board.tileApothem, this.Translation.z - 1.5f);
+		spawnTile("empty_tile", xPos + 2*tileApothem, zPos);
+		spawnTile("empty_tile", xPos - 2*tileApothem, zPos);
+		spawnTile("empty_tile", xPos + tileApothem, zPos + 1.5f);
+		spawnTile("empty_tile", xPos + tileApothem, zPos - 1.5f);
+		spawnTile("empty_tile", xPos - tileApothem, zPos + 1.5f);
+		spawnTile("empty_tile", xPos - tileApothem, zPos - 1.5f);
 		
 	}
 }

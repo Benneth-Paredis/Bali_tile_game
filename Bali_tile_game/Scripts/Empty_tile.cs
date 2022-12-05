@@ -26,7 +26,6 @@ public class Empty_tile : Tile
 			//Left mouse button click
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 1)
 			{
-				GD.Print("Left Mouse button click");
 				game_board.click_empty_tile(this.Translation.x, this.Translation.z);
 				QueueFree();
 			}
@@ -34,7 +33,7 @@ public class Empty_tile : Tile
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 2)
 			{
 				GD.Print("Right mouse button click");
-				this.Visible = false;
+				QueueFree();
 			}
 		}
 	}
