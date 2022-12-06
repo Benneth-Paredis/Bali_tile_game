@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nahta\\games\\Bali_tile_game\\Bali_tile_game.csproj": {}
+    "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nahta\\games\\Bali_tile_game\\Bali_tile_game.csproj": {
+    "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nahta\\games\\Bali_tile_game\\Bali_tile_game.csproj",
+        "projectUniqueName": "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj",
         "projectName": "Bali_tile_game",
-        "projectPath": "C:\\Users\\nahta\\games\\Bali_tile_game\\Bali_tile_game.csproj",
-        "packagesPath": "C:\\Users\\nahta\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nahta\\games\\Bali_tile_game\\.mono\\temp\\obj\\",
+        "projectPath": "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj",
+        "packagesPath": "/home/qwerty/.nuget/packages/",
+        "outputPath": "/home/qwerty/games/Bali_tile_game/Bali_tile_game/.mono/temp/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\nahta\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/qwerty/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net472"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,7 +37,7 @@
       "frameworks": {
         "net472": {
           "targetAlias": "net472",
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/mono/msbuild/Current/bin/RuntimeIdentifierGraph.json"
         }
       }
     }
