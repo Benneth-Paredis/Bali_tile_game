@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://3D-models/Ocean.obj" type="ArrayMesh" id=1]
+[ext_resource path="res://Materials/Blue_light.material" type="Material" id=2]
+
+[node name="Spatial" type="Spatial"]
+
+[node name="CSGMesh" type="CSGMesh" parent="."]
+transform = Transform( 7.94429, 0, 0, 0, 0.993037, 0, 0, 0, 4.31971, 0, 0, 0 )
+mesh = ExtResource( 1 )
+material = ExtResource( 2 )
