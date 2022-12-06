@@ -84,7 +84,7 @@ public class Game_board : Spatial
 		spawnTile("empty_tile", xHex + 1, zHex);
 		spawnTile("empty_tile", xHex - 1, zHex);
 
-		if((sign(zHex) * zHex) % 2 == 0) // even rij
+		if((Math.Sign(zHex) * zHex) % 2 == 0) // even rij
 		{
 			spawnTile("empty_tile", xHex - 1, zHex + 1);
 			spawnTile("empty_tile", xHex - 1, zHex - 1);
@@ -102,24 +102,9 @@ public class Game_board : Spatial
 	
 	public Vector3 hex_coordinates(int xHex, int zHex)
 	{
-        float xPos = 2 * xHex * tileApothem + (sign(zHex) * zHex) % 2 * tileApothem;
+        float xPos = 2 * xHex * tileApothem + (Math.Sign(zHex) * zHex) % 2 * tileApothem;
 		float yPos = 0;
 		float zPos = 1.5f * zHex * tileHeight;
 		return new Vector3(xPos, yPos, zPos);
 	}
-
-	public float sign(float x)
-	{
-		if (x < 0)
-		{
-			return -1;
-		}
-		else
-		{
-			return 1;
-		}
-		
-
-	}
-	
 }
