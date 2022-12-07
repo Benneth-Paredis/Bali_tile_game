@@ -10,6 +10,8 @@ public class Game_board : Spatial
 	PackedScene rice_farm_tile;
 	float tileHeight = 1;
 
+	AudioStreamPlayer audioStreamPlayer;
+
 	List<(int, int)> occupiedPositions = new List<(int, int)>();
 
 	//With of the hexagon tile.
@@ -17,9 +19,13 @@ public class Game_board : Spatial
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		//Get all tile scenes
 		emptyTile = (PackedScene)ResourceLoader.Load("res://Scenes/Empty_tile.tscn");
 		banana_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Banana_farm_tile.tscn");
 		rice_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Rice_farm_tile.tscn");
+
+		//Get audio player
+		audioStreamPlayer = (AudioStreamPlayer)GetNode("AudioStreamPlayer");
 		
 		spawnTile("empty_tile", 0, 0);
 	}
@@ -98,6 +104,8 @@ public class Game_board : Spatial
 
 		spawnTile("empty_tile", xHex, zHex + 1);
 		spawnTile("empty_tile", xHex, zHex - 1);
+
+		audioStreamPlayer.Play();
 	}
 	
 	public Vector3 hex_coordinates(int xHex, int zHex)
