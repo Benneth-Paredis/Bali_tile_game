@@ -8,24 +8,31 @@
     ".NETFramework,Version=v4.7.2": []
   },
   "packageFolders": {
-    "/home/qwerty/.nuget/packages/": {}
+    "C:\\Users\\nahta\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj",
+      "projectUniqueName": "C:\\USERS\\NAHTA\\GAMES\\BALI_TILE_GAME\\Bali_tile_game.csproj",
       "projectName": "Bali_tile_game",
-      "projectPath": "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj",
-      "packagesPath": "/home/qwerty/.nuget/packages/",
-      "outputPath": "/home/qwerty/games/Bali_tile_game/Bali_tile_game/.mono/temp/obj/",
+      "projectPath": "C:\\USERS\\NAHTA\\GAMES\\BALI_TILE_GAME\\Bali_tile_game.csproj",
+      "packagesPath": "C:\\Users\\nahta\\.nuget\\packages\\",
+      "outputPath": "C:\\USERS\\NAHTA\\GAMES\\BALI_TILE_GAME\\.mono\\temp\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/qwerty/.config/NuGet/NuGet.Config"
+        "C:\\Users\\nahta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net472"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -43,7 +50,7 @@
     "frameworks": {
       "net472": {
         "targetAlias": "net472",
-        "runtimeIdentifierGraphPath": "/usr/lib/mono/msbuild/Current/bin/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

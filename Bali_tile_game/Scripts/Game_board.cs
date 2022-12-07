@@ -12,10 +12,10 @@ public class Game_board : Spatial
 
 	AudioStreamPlayer audioStreamPlayer;
 
-	List<(int, int)> occupiedPositions = new List<(int, int)>();
-
-	//With of the hexagon tile.
-	public float tileApothem = 0.866f;
+	//List<(int, int)> occupiedPositions = new List<(int, int)>();
+	Dictionary<(int, int), string> occupiedPositions = new Dictionary<(int, int), string>(); // The dictionary consists of a position tuple (x,z) and a string of the type
+    //With of the hexagon tile.
+    public float tileApothem = 0.866f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -31,14 +31,16 @@ public class Game_board : Spatial
 	}
 	public bool posHasTile(int xHex, int zHex)
 	{
-		for(int i = 0; i < occupiedPositions.Count; i++)
-		{
-			if(occupiedPositions[i] == (xHex, zHex))
-			{
-				return true;
-			}
-		}
-		return false;
+		return occupiedPositions.ContainsKey((xHex, zHex)); // returns if key is in occupied positions
+
+		//for(int i = 0; i < occupiedPositions.Count; i++)
+		//{
+		//	if(occupiedPositions[i] == (xHex, zHex))
+		//	{
+		//		return true;
+		//	}
+		//}
+		//return false;
 	}
 	public void spawnTile(string tile_type, int xHex, int zHex)
 	{
@@ -52,7 +54,7 @@ public class Game_board : Spatial
 			switch (tile_type)
 			{
 				case "empty_tile":
-					occupiedPositions.Add((xHex, zHex));
+					occupiedPositions.Add((xHex, zHex), "empty_tile");
 					newTile = emptyTile.Instance<Empty_tile>();
 					newTile.xHex = xHex;
 					newTile.zHex = zHex;
@@ -61,7 +63,7 @@ public class Game_board : Spatial
 					break;
 					
 				case "banana_farm_tile":
-					occupiedPositions.Add((xHex, zHex));
+					occupiedPositions.Add((xHex, zHex), "banana_farm_tile");
 					newTile = banana_farm_tile.Instance<Banana_farm_tile>();
 					newTile.xHex = xHex;
 					newTile.zHex = zHex;
@@ -70,7 +72,7 @@ public class Game_board : Spatial
 					break;
 					
 				case "rice_farm_tile":
-					occupiedPositions.Add((xHex, zHex));
+					occupiedPositions.Add((xHex, zHex), "rice_farm_tile");
 					newTile = rice_farm_tile.Instance<Rice_farm_tile>();
 					newTile.xHex = xHex;
 					newTile.zHex = zHex;
