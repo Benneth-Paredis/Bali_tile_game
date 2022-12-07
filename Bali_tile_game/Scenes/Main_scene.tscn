@@ -17,7 +17,7 @@ environment = ExtResource( 5 )
 [node name="Game_board" parent="." instance=ExtResource( 3 )]
 script = ExtResource( 2 )
 
-[node name="Spatial" parent="." instance=ExtResource( 4 )]
+[node name="Ocean" parent="." instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
