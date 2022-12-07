@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Materials/Yellow.material" type="Material" id=1]
-[ext_resource path="res://3D-models/Basic_tile.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://3D-models/banana_farm_tile.obj" type="ArrayMesh" id=2]
 
 [node name="Spatial" type="Spatial"]
 

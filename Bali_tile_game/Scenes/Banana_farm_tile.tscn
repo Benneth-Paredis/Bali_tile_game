@@ -1,12 +1,16 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Materials/Red.material" type="Material" id=1]
+[ext_resource path="res://Materials/Brown.material" type="Material" id=1]
 [ext_resource path="res://Scripts/Banana_farm_tile.cs" type="Script" id=2]
-[ext_resource path="res://3D-models/Banana_farm_tile.obj" type="ArrayMesh" id=3]
+[ext_resource path="res://3D-models/banana_farm_tile.obj" type="ArrayMesh" id=3]
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 2 )
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
+mesh = ExtResource( 3 )
+material = ExtResource( 1 )
+
+[node name="CSGMesh2" type="CSGMesh" parent="."]
 mesh = ExtResource( 3 )
 material = ExtResource( 1 )

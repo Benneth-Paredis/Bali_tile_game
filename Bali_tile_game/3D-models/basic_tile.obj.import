@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/basic_tile.obj-ce8b47d3b726ccf014f3ec54451ba2f8.mesh"
+
+[deps]
+
+files=[ "res://.import/basic_tile.obj-ce8b47d3b726ccf014f3ec54451ba2f8.mesh" ]
+
+source_file="res://3D-models/basic_tile.obj"
+dest_files=[ "res://.import/basic_tile.obj-ce8b47d3b726ccf014f3ec54451ba2f8.mesh", "res://.import/basic_tile.obj-ce8b47d3b726ccf014f3ec54451ba2f8.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286
