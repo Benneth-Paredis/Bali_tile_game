@@ -19,7 +19,7 @@ public class Empty_tile : Tile
 
 		tween = (Tween)GetNode("Tween");
 		tween.InterpolateProperty(this, "translation", new Vector3(this.Translation.x, this.Translation.y - 1.0f, this.Translation.z),
-		 new Vector3(this.Translation.x, this.Translation.y, this.Translation.z), random_time, Tween.TransitionType.Linear, Tween.EaseType.InOut);
+		new Vector3(this.Translation.x, this.Translation.y, this.Translation.z), random_time, Tween.TransitionType.Linear, Tween.EaseType.InOut);
 
 		tween.Start();
 	}
@@ -40,7 +40,8 @@ public class Empty_tile : Tile
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 2)
 			{
 				GD.Print("Right mouse button click");
-				QueueFree();
+                game_board.occupiedPositions.Remove((this.xHex, this.zHex));
+                QueueFree();
 			}
 		}
 	}

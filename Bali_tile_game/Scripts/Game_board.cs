@@ -12,8 +12,7 @@ public class Game_board : Spatial
 
 	AudioStreamPlayer audioStreamPlayer;
 
-	//List<(int, int)> occupiedPositions = new List<(int, int)>();
-	Dictionary<(int, int), string> occupiedPositions = new Dictionary<(int, int), string>(); // The dictionary consists of a position tuple (x,z) and a string of the type
+	public Dictionary<(int, int), string> occupiedPositions = new Dictionary<(int, int), string>(); // The dictionary consists of a position tuple (x,z) and a string of the type
     //With of the hexagon tile.
     public float tileApothem = 0.866f;
 	// Called when the node enters the scene tree for the first time.
@@ -32,15 +31,6 @@ public class Game_board : Spatial
 	public bool posHasTile(int xHex, int zHex)
 	{
 		return occupiedPositions.ContainsKey((xHex, zHex)); // returns if key is in occupied positions
-
-		//for(int i = 0; i < occupiedPositions.Count; i++)
-		//{
-		//	if(occupiedPositions[i] == (xHex, zHex))
-		//	{
-		//		return true;
-		//	}
-		//}
-		//return false;
 	}
 	public void spawnTile(string tile_type, int xHex, int zHex)
 	{
@@ -117,4 +107,39 @@ public class Game_board : Spatial
 		float zPos = 1.5f * zHex * tileHeight;
 		return new Vector3(xPos, yPos, zPos);
 	}
+
+
+
+
+
+	// Work in progress
+	/*public int count_field_size(int xHex, int yHex)
+	{
+		if(occupiedPositions.ContainsKey((xHex, yHex)))
+		{
+            string tileTipe = occupiedPositions[(xHex, yHex)];
+			GD.Print("Count tiles around: ", tileTipe);
+        }
+		else
+		{
+            GD.Print("Error: No tile on this position to check field size");
+        }
+
+        switch (tileTipe)
+		{
+			case "Banana_farm_tile":
+				string fieldTipe = "Banana_tile";
+				break;
+            case "Rice_farm_tile":
+                string fieldTipe = "Rice_tile";
+				break;
+        }
+        return 0;
+	}
+	*/
+
+
+
+
+
 }
