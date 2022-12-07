@@ -50,8 +50,8 @@ public class Game_board : Spatial
 					newTile = emptyTile.Instance<Empty_tile>();
 					newTile.xHex = xHex;
 					newTile.zHex = zHex;
-					AddChild(newTile);
 					newTile.Translation = new Vector3(position.x, 0, position.z);
+					AddChild(newTile);
 					break;
 					
 				case "banana_farm_tile":
@@ -59,17 +59,17 @@ public class Game_board : Spatial
 					newTile = banana_farm_tile.Instance<Banana_farm_tile>();
 					newTile.xHex = xHex;
 					newTile.zHex = zHex;
-					AddChild(newTile);
 					newTile.Translation = new Vector3(position.x, 0, position.z);
+					AddChild(newTile);
 					break;
 					
 				case "rice_farm_tile":
 					occupiedPositions.Add((xHex, zHex));
 					newTile = rice_farm_tile.Instance<Rice_farm_tile>();
-					AddChild(newTile);
 					newTile.xHex = xHex;
 					newTile.zHex = zHex;
 					newTile.Translation = new Vector3(position.x, 0, position.z);
+					AddChild(newTile);
 					break;
 			}
 		}

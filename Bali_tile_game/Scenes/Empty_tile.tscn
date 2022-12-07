@@ -8,6 +8,7 @@
 points = PoolVector3Array( 0.866025, 0.5, 0.5, 0, 0.5, 1, 0.866025, 0, 0.5, 0.866025, 0.5, -0.5, 0, 0, 1, -0.866025, 0.5, 0.5, 0.866025, 0, -0.5, 0, 0.5, -1, -0.866025, 0, 0.5, -0.866025, 0.5, -0.5, 0, 0, -1, -0.866025, 0, -0.5 )
 
 [node name="Empty_tile" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
 script = ExtResource( 1 )
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
@@ -18,5 +19,7 @@ material = ExtResource( 2 )
 
 [node name="CollisionHexagon" type="CollisionShape" parent="CSGMesh/Area"]
 shape = SubResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
 
 [connection signal="input_event" from="CSGMesh/Area" to="." method="_on_Area_input_event"]

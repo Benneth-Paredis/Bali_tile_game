@@ -4,18 +4,25 @@ using System;
 public class Empty_tile : Tile
 {
 
+	Tween tween;
+
+	
+	Random random = new Random();
+	float random_time;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		game_board = (Game_board)GetParent();
-	}
+		//Rise animation
+		random_time = random.Next(0, 11) * 0.1f * 0.4f + 0.2f;
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+		tween = (Tween)GetNode("Tween");
+		tween.InterpolateProperty(this, "translation", new Vector3(this.Translation.x, this.Translation.y - 1.0f, this.Translation.z),
+		 new Vector3(this.Translation.x, this.Translation.y, this.Translation.z), random_time, Tween.TransitionType.Linear, Tween.EaseType.InOut);
+
+		tween.Start();
+	}
 
 	//Function that gets called when a hex tile is clicked.
 	private void _on_Area_input_event(object camera, object @event, Vector3 position, Vector3 normal, int shape_idx)
