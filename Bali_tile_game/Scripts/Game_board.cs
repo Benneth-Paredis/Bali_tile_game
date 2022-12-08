@@ -8,30 +8,36 @@ public class Game_board : Spatial
 	PackedScene emptyTile;
 	PackedScene banana_farm_tile;
 	PackedScene rice_farm_tile;
+	PackedScene rice_tile;
+	PackedScene mountain_tile;
 	float tileHeight = 1;
 
 	AudioStreamPlayer audioStreamPlayer;
 
 	public Dictionary<(int, int), string> occupiedPositions = new Dictionary<(int, int), string>(); // The dictionary consists of a position tuple (x,z) and a string of the type
-    //With of the hexagon tile.
+    //Width of the hexagon tile.
     public float tileApothem = 0.866f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		//Get all tile scenes
-		emptyTile = (PackedScene)ResourceLoader.Load("res://Scenes/Empty_tile.tscn");
-		banana_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Banana_farm_tile.tscn");
-		rice_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Rice_farm_tile.tscn");
+		emptyTile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Empty_tile.tscn");
+		banana_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Banana_farm_tile.tscn");
+		rice_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_tile.tscn");
+		mountain_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Mountain_tile.tscn");
+
 
 		//Get audio player
 		audioStreamPlayer = (AudioStreamPlayer)GetNode("AudioStreamPlayer");
 		
 		spawnTile("empty_tile", 0, 0);
 	}
+	//Checks if the position in hex-coordinates contains a tile
 	public bool posHasTile(int xHex, int zHex)
 	{
 		return occupiedPositions.ContainsKey((xHex, zHex)); // returns if key is in occupied positions
 	}
+	//Spawn a tile given the tile type and its hex-coordinates
 	public void spawnTile(string tile_type, int xHex, int zHex)
 	{
 		//Hex coordinates converted to spatial 3D coordinates
@@ -69,15 +75,49 @@ public class Game_board : Spatial
 					newTile.Translation = new Vector3(position.x, 0, position.z);
 					AddChild(newTile);
 					break;
+				case "rice_tile":
+					occupiedPositions.Add((xHex, zHex), "rice_tile");
+					newTile = rice_tile.Instance<Rice_tile>();
+					newTile.xHex = xHex;
+					newTile.zHex = zHex;
+					newTile.Translation = new Vector3(position.x, 0, position.z);
+					AddChild(newTile);
+					break;
+				case "mountain_tile":
+					occupiedPositions.Add((xHex, zHex), "mountain_tile");
+					newTile = mountain_tile.Instance<Mountain_tile>();
+					newTile.xHex = xHex;
+					newTile.zHex = zHex;
+					newTile.Translation = new Vector3(position.x, 0, position.z);
+					AddChild(newTile);
+					break;
 			}
 		}
 	}
 		
 	public void click_empty_tile(int xHex,int zHex)
 	{
+		//Remove the empty tile from the occupied positions
 		occupiedPositions.Remove((xHex, zHex));
+		//Type of tile that will be spawned
+		string spawn_tile_type = "banana_farm_tile";
+		//Random number to decide which tile wil be spawned
+		int random_number = new Random().Next(0, 101);
 
-		spawnTile("banana_farm_tile", xHex, zHex);
+		if(random_number <= 10)
+		{
+			spawn_tile_type = "banana_farm_tile";
+		}
+		if(10 < random_number && random_number <= 20)
+		{
+			spawn_tile_type = "mountain_tile";
+		}
+		if(20 < random_number)
+		{
+			spawn_tile_type = "rice_tile";
+		}
+
+		spawnTile(spawn_tile_type, xHex, zHex);
 
 		spawnTile("empty_tile", xHex + 1, zHex);
 		spawnTile("empty_tile", xHex - 1, zHex);

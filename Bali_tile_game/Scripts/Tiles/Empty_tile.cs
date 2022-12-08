@@ -14,13 +14,13 @@ public class Empty_tile : Tile
 	public override void _Ready()
 	{
 		game_board = (Game_board)GetParent();
-		//Rise animation
-		random_time = random.Next(0, 11) * 0.1f * 0.4f + 0.2f;
 
+		//Random time for the rise animation
+		random_time = random.Next(0, 11) * 0.1f * 0.4f + 0.2f;
+		//Rise animation
 		tween = (Tween)GetNode("Tween");
 		tween.InterpolateProperty(this, "translation", new Vector3(this.Translation.x, this.Translation.y - 1.0f, this.Translation.z),
 		new Vector3(this.Translation.x, this.Translation.y, this.Translation.z), random_time, Tween.TransitionType.Linear, Tween.EaseType.InOut);
-
 		tween.Start();
 	}
 

@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Rice_tile.obj-5c4e4f600319bd5705d30b7f170b8b2f.mesh"
+
+[deps]
+
+files=[ "res://.import/Rice_tile.obj-5c4e4f600319bd5705d30b7f170b8b2f.mesh" ]
+
+source_file="res://3D-models/Rice_tile.obj"
+dest_files=[ "res://.import/Rice_tile.obj-5c4e4f600319bd5705d30b7f170b8b2f.mesh", "res://.import/Rice_tile.obj-5c4e4f600319bd5705d30b7f170b8b2f.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286

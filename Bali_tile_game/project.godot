@@ -12,12 +12,13 @@ config_version=4
 
 config/name="Bali_tile_game"
 run/main_scene="res://Scenes/Main_scene.tscn"
+boot_splash/show_image=false
 
-[autoload]
+[display]
 
-UserData="*res://addons/github-integration/scripts/user_data.gd"
-IconLoaderGithub="*res://addons/github-integration/scripts/IconLoaderGithub.gd"
-RestHandler="*res://addons/github-integration/scripts/RestHandler.gd"
+window/size/width=1080
+window/size/height=920
+window/size/fullscreen=true
 
 [editor_plugins]
 

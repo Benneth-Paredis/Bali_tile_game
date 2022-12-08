@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Rice_tile : Node
+public class Rice_tile : Tile
 {
     public int tileValue = 1;
     
