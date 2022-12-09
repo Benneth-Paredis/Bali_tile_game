@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-
+using System.Net;
 
 public class Game_board : Spatial
 {
@@ -23,7 +23,8 @@ public class Game_board : Spatial
 		//Get all tile scenes
 		emptyTile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Empty_tile.tscn");
 		banana_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Banana_farm_tile.tscn");
-		rice_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_tile.tscn");
+        rice_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_farm_tile.tscn");
+        rice_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_tile.tscn");
 		mountain_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Mountain_tile.tscn");
 
 
@@ -112,7 +113,11 @@ public class Game_board : Spatial
 		{
 			spawn_tile_type = "mountain_tile";
 		}
-		if(20 < random_number)
+        if (20 < random_number && random_number <= 30)
+        {
+            spawn_tile_type = "rice_farm_tile";
+        }
+        if (30 < random_number)
 		{
 			spawn_tile_type = "rice_tile";
 		}
@@ -153,32 +158,121 @@ public class Game_board : Spatial
 
 
 	// Work in progress
-	/*public int count_field_size(int xHex, int yHex)
+
+	public int count_field_size(int xHex, int zHex)
 	{
-		if(occupiedPositions.ContainsKey((xHex, yHex)))
+		// counts the field size of the position and returns it as an int
+		string tileTipe;
+		string fieldTipe = "None";
+		
+		// checks type of tile
+        if (occupiedPositions.ContainsKey((xHex, zHex)))
 		{
-            string tileTipe = occupiedPositions[(xHex, yHex)];
-			GD.Print("Count tiles around: ", tileTipe);
+            tileTipe = occupiedPositions[(xHex, zHex)];
         }
 		else
 		{
             GD.Print("Error: No tile on this position to check field size");
+			return 0;
         }
-
+		
+		// checks type of point tiles
         switch (tileTipe)
 		{
-			case "Banana_farm_tile":
-				string fieldTipe = "Banana_tile";
-				break;
-            case "Rice_farm_tile":
-                string fieldTipe = "Rice_tile";
-				break;
+			case "banana_farm_tile":
+				fieldTipe = "banana_tile";
+
+                break;
+            case "rice_farm_tile":
+                fieldTipe = "rice_tile";
+                break;
+		}
+
+		if (fieldTipe == "None")
+		{
+            GD.Print("Error: This tile is not a defined farm");
         }
-        return 0;
+
+		Globals.visitedFields = new List<(int, int)>();
+		Globals.fieldCounter = 0;
+		int fieldSize = backtrackingFieldCount(xHex, zHex, fieldTipe, tileTipe, Globals.visitedFields);
+		GD.Print("Fieldsize = ", fieldSize);
+		return fieldSize;
+	}	
+	public string examine (int xHex, int zHex, string fieldTipe, string tileTipe, List<(int, int)> visitedFields) 
+		{
+		// Checks if there is a field against the current field
+        string adjacentTileType;
+        List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
+		if (fieldTipe != occupiedPositions[(xHex, zHex)] & visitedFields.Count != 0)
+		{
+			return "ABANDON";
+		}
+
+        for (int i = 0; i < 6; i++)
+		{
+			int xExtra = surrounding_positions[i].Item1;
+            int zExtra = surrounding_positions[i].Item2;
+            adjacentTileType = occupiedPositions[(xHex + xExtra, zHex + zExtra)];
+			if(adjacentTileType == fieldTipe)
+			{
+				if (!visitedFields.Contains((xHex + xExtra, zHex + zExtra)) )
+				{
+					Globals.fieldCounter++;
+					//GD.Print("fieldCounter: ",Globals.fieldCounter);
+					visitedFields.Add((xHex + xExtra, zHex + zExtra));
+					return "CONTINUE";
+				}
+			}
+			if(adjacentTileType == tileTipe)
+			{
+				GD.Print("Same tupe of farm found!!! So killl this bitch!!!! Mhuahahaha");
+			}
+		}
+		return "ABANDON";
 	}
-	*/
-
-
+	public int backtrackingFieldCount(int xHex, int zHex, string fieldTipe, string tileTipe, List<(int, int)> visitedFields)
+	{
+		// Backtracking algoritm that counts adjecent fields
+		string result = examine(xHex, zHex, fieldTipe, tileTipe, visitedFields);
+		if(result == "CONTINUE")
+		{
+            List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
+            for (int i = 0; i < 6; i++)
+			{
+                int xExtra = surrounding_positions[i].Item1;
+                int zExtra = surrounding_positions[i].Item2;
+                backtrackingFieldCount(xHex + xExtra, zHex + zExtra, fieldTipe, tileTipe, visitedFields);
+			}
+        }
+		return Globals.fieldCounter;
+	}
+	public List<(int, int)> adjacent_tiles (int xHex, int zHex)
+		{
+    // list of possible positions next to current tile in tuple of hex coordinates
+		List<(int, int)> surrounding_positions = new List<(int, int)>(6);
+		surrounding_positions.Add((1, 0));
+        surrounding_positions.Add((-1, 0));
+        surrounding_positions.Add((0, 1));
+        surrounding_positions.Add((0, -1));
+        if ((Math.Sign(zHex)* zHex) % 2 == 0) // even rij
+			{
+				surrounding_positions.Add((-1, 1));
+				surrounding_positions.Add((-1, -1));
+			}
+        else // oneven rij
+			{
+			surrounding_positions.Add((1, 1));
+			surrounding_positions.Add((1, -1));
+			}
+		return surrounding_positions;
+		}
+	public static class Globals
+	{
+		// a class for global variables that can be modified in every function
+        public static List<(int, int)> visitedFields = new List<(int, int)>();
+		public static int fieldCounter = new int();
+    }
 
 
 
