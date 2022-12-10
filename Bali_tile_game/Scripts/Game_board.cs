@@ -17,8 +17,8 @@ public class Game_board : Spatial
 	AudioStreamPlayer audioStreamPlayer;
 
 	public Dictionary<(int, int), string> occupiedPositions = new Dictionary<(int, int), string>(); // The dictionary consists of a position tuple (x,z) and a string of the type
-    //Width of the hexagon tile.
-    public float tileApothem = 0.866f;
+	//Width of the hexagon tile.
+	public float tileApothem = 0.866f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -29,6 +29,7 @@ public class Game_board : Spatial
         rice_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_tile.tscn");
         banana_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Banana_tile.tscn");
         mountain_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Mountain_tile.tscn");
+
 
 
 		//Get audio player
@@ -147,11 +148,11 @@ public class Game_board : Spatial
 			spawnTile("empty_tile", xHex - 1, zHex + 1);
 			spawnTile("empty_tile", xHex - 1, zHex - 1);
 		}
-        else // oneven rij
-        {
-            spawnTile("empty_tile", xHex + 1, zHex + 1);
-            spawnTile("empty_tile", xHex + 1, zHex - 1);
-        }
+		else // oneven rij
+		{
+			spawnTile("empty_tile", xHex + 1, zHex + 1);
+			spawnTile("empty_tile", xHex + 1, zHex - 1);
+		}
 
 
 		spawnTile("empty_tile", xHex, zHex + 1);
@@ -162,7 +163,7 @@ public class Game_board : Spatial
 	
 	public Vector3 hex_coordinates(int xHex, int zHex)
 	{
-        float xPos = 2 * xHex * tileApothem + (Math.Sign(zHex) * zHex) % 2 * tileApothem;
+		float xPos = 2 * xHex * tileApothem + (Math.Sign(zHex) * zHex) % 2 * tileApothem;
 		float yPos = 0;
 		float zPos = 1.5f * zHex * tileHeight;
 		return new Vector3(xPos, yPos, zPos);
@@ -172,7 +173,6 @@ public class Game_board : Spatial
 
 
 
-	// Work in progress
 
 	public int count_field_size(int xHex, int zHex)
 	{
@@ -181,40 +181,41 @@ public class Game_board : Spatial
 		string fieldTipe = "None";
 
 		// checks type of tile
-        if (occupiedPositions.ContainsKey((xHex, zHex)))
+		if (occupiedPositions.ContainsKey((xHex, zHex)))
 		{
-            tileTipe = occupiedPositions[(xHex, zHex)];
-        }
+			tileTipe = occupiedPositions[(xHex, zHex)];
+		}
 		else
 		{
-            GD.Print("Error: No tile on this position to check field size");
+			GD.Print("Error: No tile on this position to check field size");
 			return 0;
-        }
-		
+		}
+
 		// checks type of point tiles
-        switch (tileTipe)
+		switch (tileTipe)
 		{
 			case "banana_farm_tile":
 				fieldTipe = "banana_tile";
 
-                break;
-            case "rice_farm_tile":
-                fieldTipe = "rice_tile";
-                break;
+				break;
+			case "rice_farm_tile":
+				fieldTipe = "rice_tile";
+				break;
 		}
 
 		if (fieldTipe == "None")
 		{
-            GD.Print("Error: This tile is not a defined farm");
-        }
+			GD.Print("Error: This tile is not a defined farm");
+		}
 
 		Globals.visitedFields = new List<(int, int)>();
-        //GD.Print("Position farm ", Globals.visitedFields[0]);
-        backtrackingFieldCount(xHex, zHex, fieldTipe, tileTipe, Globals.visitedFields);
+		//GD.Print("Position farm ", Globals.visitedFields[0]);
+		backtrackingFieldCount(xHex, zHex, fieldTipe, tileTipe, Globals.visitedFields);
 		int fieldSize = Globals.visitedFields.Count;
-        GD.Print("Fieldsize = ", fieldSize);
+		GD.Print("Fieldsize = ", fieldSize);
 		return fieldSize;
 	}
+
 	public void backtrackingFieldCount(int xHex, int zHex, string fieldTipe, string tileTipe, List<(int, int)> visitedFields)
 	{
 		// Backtracking algoritm that counts adjecent fields
@@ -296,7 +297,7 @@ public class Game_board : Spatial
 
     public List<(int, int)> adjacent_tiles (int xHex, int zHex)
 		{
-    // list of possible positions next to current tile in tuple of hex coordinates
+	// list of possible positions next to current tile in tuple of hex coordinates
 		List<(int, int)> surrounding_positions = new List<(int, int)>(6);
 		surrounding_positions.Add((1 + xHex, zHex + 0));
         surrounding_positions.Add((-1 + xHex, zHex + 0));
@@ -307,7 +308,7 @@ public class Game_board : Spatial
 				surrounding_positions.Add((-1 + xHex, zHex + 1));
 				surrounding_positions.Add((-1 + xHex, zHex + -1));
 			}
-        else // oneven rij
+		else // oneven rij
 			{
 			surrounding_positions.Add((1 + xHex, zHex + 1));
 			surrounding_positions.Add((1 + xHex, zHex + -1));
