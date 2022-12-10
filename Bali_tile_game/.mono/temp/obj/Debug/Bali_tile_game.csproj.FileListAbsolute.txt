@@ -15,6 +15,7 @@ C:/Users/nahta/games/Bali_tile_game/Bali_tile_game/.mono/temp/obj/Debug/Bali_til
 /home/qwerty/games/Bali_tile_game/Bali_tile_game/.mono/temp/obj/Debug/Bali_tile_game.csproj.CoreCompileInputs.cache
 /home/qwerty/games/Bali_tile_game/Bali_tile_game/.mono/temp/obj/Debug/Bali_tile_game.dll
 /home/qwerty/games/Bali_tile_game/Bali_tile_game/.mono/temp/obj/Debug/Bali_tile_game.pdb
+<<<<<<< HEAD
 C:/Users/nahta/games/Bali_tile_game/.mono/temp/bin/Debug/Bali_tile_game.dll
 C:/Users/nahta/games/Bali_tile_game/.mono/temp/bin/Debug/Bali_tile_game.pdb
 C:/Users/nahta/games/Bali_tile_game/.mono/temp/obj/Debug/Bali_tile_game.csproj.AssemblyReference.cache
@@ -33,3 +34,14 @@ C:\Users\Benneth\Bali_tile_game\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_ga
 C:\Users\Benneth\Bali_tile_game\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.csproj.CoreCompileInputs.cache
 C:\Users\Benneth\Bali_tile_game\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.dll
 C:\Users\Benneth\Bali_tile_game\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.pdb
+=======
+C:\Users\nahta\games\Bali_tile_game\.mono\temp\bin\Debug\Bali_tile_game.dll
+C:\Users\nahta\games\Bali_tile_game\.mono\temp\bin\Debug\Bali_tile_game.pdb
+C:\Users\nahta\games\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.csproj.AssemblyReference.cache
+C:\Users\nahta\games\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nahta\games\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.AssemblyInfoInputs.cache
+C:\Users\nahta\games\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.AssemblyInfo.cs
+C:\Users\nahta\games\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.csproj.CoreCompileInputs.cache
+C:\Users\nahta\games\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.dll
+C:\Users\nahta\games\Bali_tile_game\.mono\temp\obj\Debug\Bali_tile_game.pdb
+>>>>>>> 31c7b83e4931d958405ef1b00bab652f1e4b948b
