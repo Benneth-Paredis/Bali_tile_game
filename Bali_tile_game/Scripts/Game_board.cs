@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Runtime.ConstrainedExecution;
 
 public class Game_board : Spatial
 {
@@ -9,7 +10,8 @@ public class Game_board : Spatial
 	PackedScene banana_farm_tile;
 	PackedScene rice_farm_tile;
 	PackedScene rice_tile;
-	PackedScene mountain_tile;
+    PackedScene banana_tile;
+    PackedScene mountain_tile;
 	float tileHeight = 1;
 
 	AudioStreamPlayer audioStreamPlayer;
@@ -25,7 +27,8 @@ public class Game_board : Spatial
 		banana_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Banana_farm_tile.tscn");
         rice_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_farm_tile.tscn");
         rice_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_tile.tscn");
-		mountain_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Mountain_tile.tscn");
+        banana_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Banana_tile.tscn");
+        mountain_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Mountain_tile.tscn");
 
 
 		//Get audio player
@@ -84,7 +87,15 @@ public class Game_board : Spatial
 					newTile.Translation = new Vector3(position.x, 0, position.z);
 					AddChild(newTile);
 					break;
-				case "mountain_tile":
+                case "banana_tile":
+                    occupiedPositions.Add((xHex, zHex), "banana_tile");
+                    newTile = banana_tile.Instance<Banana_tile>();
+                    newTile.xHex = xHex;
+                    newTile.zHex = zHex;
+                    newTile.Translation = new Vector3(position.x, 0, position.z);
+                    AddChild(newTile);
+                    break;
+                case "mountain_tile":
 					occupiedPositions.Add((xHex, zHex), "mountain_tile");
 					newTile = mountain_tile.Instance<Mountain_tile>();
 					newTile.xHex = xHex;
@@ -117,7 +128,11 @@ public class Game_board : Spatial
         {
             spawn_tile_type = "rice_farm_tile";
         }
-        if (30 < random_number)
+        if (30 < random_number && random_number <= 60)
+        {
+            spawn_tile_type = "banana_tile";
+        }
+        if (60 < random_number)
 		{
 			spawn_tile_type = "rice_tile";
 		}
@@ -164,7 +179,7 @@ public class Game_board : Spatial
 		// counts the field size of the position and returns it as an int
 		string tileTipe;
 		string fieldTipe = "None";
-		
+
 		// checks type of tile
         if (occupiedPositions.ContainsKey((xHex, zHex)))
 		{
@@ -194,56 +209,35 @@ public class Game_board : Spatial
         }
 
 		Globals.visitedFields = new List<(int, int)>();
-		Globals.visitedFields.Add((xHex, zHex));
-		Globals.fieldCounter = 0;
-		int fieldSize = backtrackingFieldCount(xHex, zHex, fieldTipe, tileTipe, Globals.visitedFields);
-		GD.Print("Fieldsize = ", fieldSize);
+        //GD.Print("Position farm ", Globals.visitedFields[0]);
+        backtrackingFieldCount(xHex, zHex, fieldTipe, tileTipe, Globals.visitedFields);
+		int fieldSize = Globals.visitedFields.Count;
+        GD.Print("Fieldsize = ", fieldSize);
 		return fieldSize;
-	}	
-	public string examine (int xHex, int zHex, string fieldTipe, string tileTipe, List<(int, int)> visitedFields) 
-		{
-		// Checks if there is a field against the current field
-        string adjacentTileType;
-        List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
-		if (fieldTipe != occupiedPositions[(xHex, zHex)] & visitedFields.Count != 1)
-		{
-			return "ABANDON";
-		}
-
-        for (int i = 0; i < 6; i++)
-		{
-            adjacentTileType = occupiedPositions[surrounding_positions[i]];
-			if(adjacentTileType == fieldTipe)
-			{
-				if (!visitedFields.Contains(surrounding_positions[i]))
-				{
-					Globals.fieldCounter++;
-					//GD.Print("fieldCounter: ",Globals.fieldCounter);
-					visitedFields.Add(surrounding_positions[i]);
-					return "CONTINUE";
-				}
-			}
-			if(adjacentTileType == tileTipe & !visitedFields.Contains(surrounding_positions[i]))
-			{
-				GD.Print("Same type of farm found!!! So killl this bitch!!!! Mhuahahaha");
-                visitedFields.Add(surrounding_positions[i]);
-            }
-		}
-		return "ABANDON";
 	}
-	public int backtrackingFieldCount(int xHex, int zHex, string fieldTipe, string tileTipe, List<(int, int)> visitedFields)
+	public void backtrackingFieldCount(int xHex, int zHex, string fieldTipe, string tileTipe, List<(int, int)> visitedFields)
 	{
 		// Backtracking algoritm that counts adjecent fields
-		string result = examine(xHex, zHex, fieldTipe, tileTipe, visitedFields);
-		if(result == "CONTINUE")
+
+		if (occupiedPositions[(xHex,zHex)] == fieldTipe && !visitedFields.Contains((xHex, zHex)))
 		{
-            List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
-            for (int i = 0; i < 6; i++)
+			//GD.Print("field ",Globals.fieldCounter, " New field on tile: ", (xHex, zHex));
+			visitedFields.Add((xHex, zHex));
+		}
+
+        List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
+		for (int i = 0; i < 6; i++)
+		{
+			if (fieldTipe == occupiedPositions[surrounding_positions[i]] & !visitedFields.Contains(surrounding_positions[i]))
 			{
-                backtrackingFieldCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, fieldTipe, tileTipe, visitedFields);
+				backtrackingFieldCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, fieldTipe, tileTipe, visitedFields);
 			}
+            if(tileTipe == occupiedPositions[surrounding_positions[i]] & !visitedFields.Contains(surrounding_positions[i]))
+			{
+				//GD.Print("Same farm found");
+			}
+
         }
-		return Globals.fieldCounter;
 	}
 	public void check_finished_fields(int xHex, int zHex)
 	{
@@ -324,7 +318,6 @@ public class Game_board : Spatial
 	{
 		// a class for global variables that can be modified in every function
         public static List<(int, int)> visitedFields = new List<(int, int)>();
-		public static int fieldCounter = new int();
     }
 
 

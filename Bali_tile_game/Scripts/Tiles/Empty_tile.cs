@@ -34,8 +34,8 @@ public class Empty_tile : Tile
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 1)
 			{
 				game_board.click_empty_tile(this.xHex, this.zHex);
-				game_board.check_finished_fields(this.xHex,this.zHex);
 				QueueFree();
+				game_board.check_finished_fields(this.xHex,this.zHex);
 			}
 			//Right mouse button click
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 2)

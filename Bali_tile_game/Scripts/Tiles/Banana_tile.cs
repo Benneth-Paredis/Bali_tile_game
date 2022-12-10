@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Banana_tile : Node
+public class Banana_tile : Tile
 {
 	public int tileValue = 1;
 
