@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj": {}
+    "C:\\Users\\Benneth\\Bali_tile_game\\Bali_tile_game\\Bali_tile_game.csproj": {}
   },
   "projects": {
-    "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj": {
+    "C:\\Users\\Benneth\\Bali_tile_game\\Bali_tile_game\\Bali_tile_game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj",
+        "projectUniqueName": "C:\\Users\\Benneth\\Bali_tile_game\\Bali_tile_game\\Bali_tile_game.csproj",
         "projectName": "Bali_tile_game",
-        "projectPath": "/home/qwerty/games/Bali_tile_game/Bali_tile_game/Bali_tile_game.csproj",
-        "packagesPath": "/home/qwerty/.nuget/packages/",
-        "outputPath": "/home/qwerty/games/Bali_tile_game/Bali_tile_game/.mono/temp/obj/",
+        "projectPath": "C:\\Users\\Benneth\\Bali_tile_game\\Bali_tile_game\\Bali_tile_game.csproj",
+        "packagesPath": "C:\\Users\\Benneth\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Benneth\\Bali_tile_game\\Bali_tile_game\\.mono\\temp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/qwerty/.config/NuGet/NuGet.Config"
+          "C:\\Users\\Benneth\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net472"
@@ -37,7 +37,7 @@
       "frameworks": {
         "net472": {
           "targetAlias": "net472",
-          "runtimeIdentifierGraphPath": "/usr/lib/mono/msbuild/Current/bin/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

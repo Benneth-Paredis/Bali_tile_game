@@ -40,8 +40,8 @@ public class Empty_tile : Tile
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 2)
 			{
 				GD.Print("Right mouse button click");
-                game_board.occupiedPositions.Remove((this.xHex, this.zHex));
-                QueueFree();
+				game_board.occupiedPositions.Remove((this.xHex, this.zHex));
+				QueueFree();
 			}
 		}
 	}

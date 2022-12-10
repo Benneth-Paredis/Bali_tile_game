@@ -15,8 +15,8 @@ public class Game_board : Spatial
 	AudioStreamPlayer audioStreamPlayer;
 
 	public Dictionary<(int, int), string> occupiedPositions = new Dictionary<(int, int), string>(); // The dictionary consists of a position tuple (x,z) and a string of the type
-    //Width of the hexagon tile.
-    public float tileApothem = 0.866f;
+	//Width of the hexagon tile.
+	public float tileApothem = 0.866f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -127,11 +127,11 @@ public class Game_board : Spatial
 			spawnTile("empty_tile", xHex - 1, zHex + 1);
 			spawnTile("empty_tile", xHex - 1, zHex - 1);
 		}
-        else // oneven rij
-        {
-            spawnTile("empty_tile", xHex + 1, zHex + 1);
-            spawnTile("empty_tile", xHex + 1, zHex - 1);
-        }
+		else // oneven rij
+		{
+			spawnTile("empty_tile", xHex + 1, zHex + 1);
+			spawnTile("empty_tile", xHex + 1, zHex - 1);
+		}
 
 
 		spawnTile("empty_tile", xHex, zHex + 1);
@@ -142,7 +142,7 @@ public class Game_board : Spatial
 	
 	public Vector3 hex_coordinates(int xHex, int zHex)
 	{
-        float xPos = 2 * xHex * tileApothem + (Math.Sign(zHex) * zHex) % 2 * tileApothem;
+		float xPos = 2 * xHex * tileApothem + (Math.Sign(zHex) * zHex) % 2 * tileApothem;
 		float yPos = 0;
 		float zPos = 1.5f * zHex * tileHeight;
 		return new Vector3(xPos, yPos, zPos);
@@ -157,24 +157,24 @@ public class Game_board : Spatial
 	{
 		if(occupiedPositions.ContainsKey((xHex, yHex)))
 		{
-            string tileTipe = occupiedPositions[(xHex, yHex)];
+			string tileTipe = occupiedPositions[(xHex, yHex)];
 			GD.Print("Count tiles around: ", tileTipe);
-        }
+		}
 		else
 		{
-            GD.Print("Error: No tile on this position to check field size");
-        }
+			GD.Print("Error: No tile on this position to check field size");
+		}
 
-        switch (tileTipe)
+		switch (tileTipe)
 		{
 			case "Banana_farm_tile":
 				string fieldTipe = "Banana_tile";
 				break;
-            case "Rice_farm_tile":
-                string fieldTipe = "Rice_tile";
+			case "Rice_farm_tile":
+				string fieldTipe = "Rice_tile";
 				break;
-        }
-        return 0;
+		}
+		return 0;
 	}
 	*/
 
