@@ -31,6 +31,9 @@ public class Game_board : Spatial
 		audioStreamPlayer = (AudioStreamPlayer)GetNode("AudioStreamPlayer");
 		
 		spawnTile("empty_tile", 0, 0);
+		spawnTile("empty_tile", -3, -4);
+		spawnTile("empty_tile", 5, 2);
+
 	}
 	//Checks if the position in hex-coordinates contains a tile
 	public bool posHasTile(int xHex, int zHex)
