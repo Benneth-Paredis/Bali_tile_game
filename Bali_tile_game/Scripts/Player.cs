@@ -13,6 +13,8 @@ public class Player : Node
 
 	public override void _Ready()
 	{
-		
-	}
+		ownedFarms= new List<(int, int)> ();
+        score = 0;
+
+    }
 }
