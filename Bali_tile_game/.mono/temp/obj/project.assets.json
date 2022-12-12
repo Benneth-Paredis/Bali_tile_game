@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nahta\\games\\Bali_tile_game\\Bali_tile_game.csproj",
+      "projectUniqueName": "C:\\USERS\\NAHTA\\GAMES\\BALI_TILE_GAME\\Bali_tile_game.csproj",
       "projectName": "Bali_tile_game",
-      "projectPath": "C:\\Users\\nahta\\games\\Bali_tile_game\\Bali_tile_game.csproj",
+      "projectPath": "C:\\USERS\\NAHTA\\GAMES\\BALI_TILE_GAME\\Bali_tile_game.csproj",
       "packagesPath": "C:\\Users\\nahta\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nahta\\games\\Bali_tile_game\\.mono\\temp\\obj\\",
+      "outputPath": "C:\\USERS\\NAHTA\\GAMES\\BALI_TILE_GAME\\.mono\\temp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
