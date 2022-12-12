@@ -197,102 +197,12 @@ public class Game_board : Spatial
 
 
 
-
-
-	public int count_field_size(int xHex, int zHex)
-	{
-		// counts the field size of the position and returns it as an int
-		string tileTipe;
-		string fieldTipe = "None";
-
-		// checks type of tile
-		if (occupiedPositions.ContainsKey((xHex, zHex)))
-		{
-			tileTipe = occupiedPositions[(xHex, zHex)];
-		}
-		else
-		{
-			GD.Print("Error: No tile on this position to check field size");
-			return 0;
-		}
-
-		// checks type of point tiles
-		switch (tileTipe)
-		{
-			case "banana_farm_tile":
-				fieldTipe = "banana_tile";
-
-				break;
-			case "rice_farm_tile":
-				fieldTipe = "rice_tile";
-				break;
-		}
-
-		if (fieldTipe == "None")
-		{
-			GD.Print("Error: This tile is not a defined farm");
-		}
-
-        List<(int, int)> visitedFarms = new List<(int, int)>
-		{
-			(xHex,zHex)
-		};
-		visitedFields = new List<(int, int)>();
-        backtrackingFieldCount(xHex, zHex, fieldTipe, tileTipe, visitedFields, visitedFarms);
-		int fieldSize = visitedFields.Count;
-		GD.Print("Fieldsize = ", fieldSize);
-		return fieldSize;
-	}
-
-	public void backtrackingFieldCount(int xHex, int zHex, string fieldTipe, string tileTipe, List<(int, int)> visitedFields, List<(int, int)> visitedFarms)
-	{
-		// Backtracking algoritm that counts adjecent fields
-
-		if (occupiedPositions[(xHex,zHex)] == fieldTipe && !visitedFields.Contains((xHex, zHex)))
-		{
-			//GD.Print("field ",fieldCounter, " New field on tile: ", (xHex, zHex));
-			visitedFields.Add((xHex, zHex));
-		}
-
-        List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
-		for (int i = 0; i < 6; i++)
-		{
-			if (fieldTipe == occupiedPositions[surrounding_positions[i]] & !visitedFields.Contains(surrounding_positions[i]))
-			{
-				backtrackingFieldCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, fieldTipe, tileTipe, visitedFields, visitedFarms);
-			}
-			else
-			{
-				if(tileTipe == occupiedPositions[surrounding_positions[i]] & !visitedFarms.Contains(surrounding_positions[i]))
-				{
-					visitedFarms.Add(surrounding_positions[i]);
-                    Player farmOwner = playerList[0]; // assigned to avoid errors but will always be updated in while loop to correct owner
-                    bool farmOwner_found = false;
-					int j = 0;
-                    while (j < playerList.Count & !farmOwner_found)
-                    {
-                        if (playerList[j].ownedFarms.Contains(surrounding_positions[i]))
-                        {
-                            farmOwner = playerList[j];
-                            farmOwner_found = true;
-                        }
-						j++;
-                    }
-					if (farmOwner_found)
-					{
-						farmOwner.ownedFarms.Remove(surrounding_positions[i]);
-						GD.Print("Player: ",playerList.IndexOf(farmOwner) , " lost its ", occupiedPositions[surrounding_positions[i]]);
-					}
-				}
-			}
-
-
-        }
-	}
-	public void check_finished_fields(int xHex, int zHex)
+    public void check_finished_fields(int xHex, int zHex)
 	{
         string tileTipeAdjacentTtile = "None";
 		int fieldsize;
+		int farmsize;
+
 		bool adjacentFarmFound = false;
 		bool unfinishedFarm = false;
         List<(int, int)> possibleFarmPositions= adjacent_tiles(xHex, zHex);
@@ -350,9 +260,11 @@ public class Game_board : Spatial
                     }
                     if (farmOwner_found)
 					{
+						List<(int, int)> ownedFarms = new List<(int, int)> { possibleFarmPositions[i] };
 						GD.Print("Found finished farm! Of type: ", tileTipeAdjacentTtile, " from player ", playerList.IndexOf(farmOwner));
-						fieldsize = count_field_size(possibleFarmPositions[i].Item1, possibleFarmPositions[i].Item2);
-						farmOwner.score += fieldsize;
+						farmsize = count_farm_size(possibleFarmPositions[i].Item1, possibleFarmPositions[i].Item2, farmOwner, ownedFarms);
+                        fieldsize = count_field_size(possibleFarmPositions[i].Item1, possibleFarmPositions[i].Item2, ownedFarms);
+						farmOwner.score += fieldsize * farmsize;
 						farmOwner.ownedFarms.Remove(possibleFarmPositions[i]);
 						GD.Print("Total score of player ",playerList.IndexOf(farmOwner), " = ", farmOwner.score, " points");
 					}
@@ -365,6 +277,152 @@ public class Game_board : Spatial
 			}
         }
 
+    }
+	public int count_field_size(int xHex, int zHex, List<(int, int)> ownedFarms)
+	{
+		// counts the field size of the position and returns it as an int
+		string tileTipe;
+		string fieldTipe = "None";
+
+		// checks type of tile
+		if (occupiedPositions.ContainsKey((xHex, zHex)))
+		{
+			tileTipe = occupiedPositions[(xHex, zHex)];
+		}
+		else
+		{
+			GD.Print("Error: No tile on this position to check field size");
+			return 0;
+		}
+
+		// checks type of point tiles
+		switch (tileTipe)
+		{
+			case "banana_farm_tile":
+				fieldTipe = "banana_tile";
+
+				break;
+			case "rice_farm_tile":
+				fieldTipe = "rice_tile";
+				break;
+		}
+
+		if (fieldTipe == "None")
+		{
+			GD.Print("Error: This tile is not a defined farm");
+		}
+
+        List<(int, int)> visitedFarms = ownedFarms;
+		visitedFields = new List<(int, int)>();
+        backtrackingFieldCount(xHex, zHex, fieldTipe, tileTipe, visitedFields, visitedFarms);
+		int fieldSize = visitedFields.Count;
+		GD.Print("Fieldsize = ", fieldSize);
+		return fieldSize;
+	}
+    public int count_farm_size(int xHex, int zHex, Player farmer, List<(int,int)> ownedFarms)
+    {
+        // counts the field size of the position and returns it as an int
+        string tileTipe;
+
+        // checks type of tile
+        if (occupiedPositions.ContainsKey((xHex, zHex)))
+        {
+            tileTipe = occupiedPositions[(xHex, zHex)];
+        }
+        else
+        {
+            GD.Print("Error: No tile on this position to check field size");
+            return 0;
+        }
+
+        List<(int, int)> visitedFarms = new List<(int, int)>
+        {
+            (xHex,zHex)
+        };
+		GD.Print("Farmer= ", playerList.IndexOf(farmer));
+        backtrackingFarmCount(xHex, zHex, tileTipe, visitedFarms, ownedFarms, farmer);
+		int farmSize = ownedFarms.Count;
+        GD.Print("FarmSize = ", farmSize);
+        return farmSize;
+    }
+    public void backtrackingFieldCount(int xHex, int zHex, string fieldTipe, string tileTipe, List<(int, int)> visitedFields, List<(int, int)> visitedFarms)
+	{
+		// Backtracking algoritm that counts adjecent fields
+
+		if (occupiedPositions[(xHex,zHex)] == fieldTipe && !visitedFields.Contains((xHex, zHex)))
+		{
+			//GD.Print("field ",fieldCounter, " New field on tile: ", (xHex, zHex));
+			visitedFields.Add((xHex, zHex));
+		}
+
+        List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
+		for (int i = 0; i < 6; i++)
+		{
+			if (fieldTipe == occupiedPositions[surrounding_positions[i]] & !visitedFields.Contains(surrounding_positions[i]))
+			{
+				backtrackingFieldCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, fieldTipe, tileTipe, visitedFields, visitedFarms);
+			}
+			else
+			{
+				if(tileTipe == occupiedPositions[surrounding_positions[i]] & !visitedFarms.Contains(surrounding_positions[i]))
+				{
+					visitedFarms.Add(surrounding_positions[i]);
+                    Player farmOwner = playerList[0]; // assigned to avoid errors but will always be updated in while loop to correct owner
+                    bool farmOwner_found = false;
+					int j = 0;
+                    while (j < playerList.Count & !farmOwner_found)
+                    {
+                        if (playerList[j].ownedFarms.Contains(surrounding_positions[i]))
+                        {
+                            farmOwner = playerList[j];
+                            farmOwner_found = true;
+                        }
+						j++;
+                    }
+					if (farmOwner_found)
+					{
+						farmOwner.ownedFarms.Remove(surrounding_positions[i]);
+						GD.Print("Player: ",playerList.IndexOf(farmOwner) , " lost its ", occupiedPositions[surrounding_positions[i]]);
+					}
+				}
+			}
+
+
+        }
+	}
+    public void backtrackingFarmCount(int xHex, int zHex, string tileTipe, List<(int, int)> visitedFarms, List<(int, int)> ownedFarms, Player farmer)
+    {
+        // Backtracking algoritm that counts adjecent farms
+        if (occupiedPositions[(xHex, zHex)] == tileTipe && !visitedFarms.Contains((xHex, zHex)))
+		{
+            Player farmOwner = playerList[0]; // assigned to avoid errors but will always be updated in while loop to correct owner
+            bool farmOwner_found = false;
+            int j = 0;
+            while (j < playerList.Count & !farmOwner_found)
+            {
+                if (playerList[j].ownedFarms.Contains((xHex, zHex)))
+                {
+                    farmOwner = playerList[j];
+                    farmOwner_found = true;
+                }
+                j++;
+            }
+            if (farmOwner_found & farmOwner == farmer)
+			{
+				ownedFarms.Add((xHex, zHex));
+				farmer.ownedFarms.Remove((xHex, zHex));
+			}
+            visitedFarms.Add((xHex, zHex));
+        }
+
+        List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
+        for (int i = 0; i < 6; i++)
+        {
+            if (tileTipe == occupiedPositions[surrounding_positions[i]] & !visitedFarms.Contains(surrounding_positions[i]))
+            {
+                backtrackingFarmCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, tileTipe, visitedFarms, ownedFarms, farmer);
+            }
+        }
     }
 
     public List<(int, int)> adjacent_tiles (int xHex, int zHex)
@@ -387,8 +445,6 @@ public class Game_board : Spatial
 			}
 		return surrounding_positions;
 		}
-
-
 	public void next_player()
 	{
 		// changes playerturn to next player

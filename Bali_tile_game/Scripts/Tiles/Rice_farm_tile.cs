@@ -15,22 +15,4 @@ public class Rice_farm_tile : Tile
     //      
     //  }
 
-    private void _on_Area_input_event(object camera, object @event, Vector3 position, Vector3 normal, int shape_idx)
-    {
-        //Checks if it is a mouse button click
-        if (@event is InputEventMouseButton inputEventMouseButton)
-        {
-            //Left mouse button click
-            if (inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 1)
-            {
-                GD.Print("Left mouse button click");
-            }
-            //Right mouse button click
-            if (inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 2)
-            {
-                GD.Print("Right mouse button click");
-                game_board.count_field_size(this.xHex, this.zHex);
-            }
-        }
-    }
 }
