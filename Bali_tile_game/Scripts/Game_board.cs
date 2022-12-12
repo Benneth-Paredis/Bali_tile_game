@@ -1,7 +1,8 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-
+using System.Net;
+using System.Runtime.ConstrainedExecution;
 
 public class Game_board : Spatial
 {
@@ -9,31 +10,51 @@ public class Game_board : Spatial
 	PackedScene banana_farm_tile;
 	PackedScene rice_farm_tile;
 	PackedScene rice_tile;
-	PackedScene mountain_tile;
-	float tileHeight = 1;
+    PackedScene banana_tile;
+    PackedScene mountain_tile;
+    PackedScene player;
 
-	AudioStreamPlayer audioStreamPlayer;
-
+    float tileHeight = 1;
+	Player player0;
+	Player player1;
 	public Dictionary<(int, int), string> occupiedPositions = new Dictionary<(int, int), string>(); // The dictionary consists of a position tuple (x,z) and a string of the type
-    //Width of the hexagon tile.
-    public float tileApothem = 0.866f;
+    public List<(int, int)> visitedFields = new List<(int, int)>();
+    public int playerTurn;
+    public List<Player> playerList;
+
+
+    AudioStreamPlayer audioStreamPlayer;
+
+	//Width of the hexagon tile.
+	public float tileApothem = 0.866f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		//Get all tile scenes
 		emptyTile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Empty_tile.tscn");
 		banana_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Banana_farm_tile.tscn");
-		rice_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_tile.tscn");
-		mountain_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Mountain_tile.tscn");
+        rice_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_farm_tile.tscn");
+        rice_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Rice_tile.tscn");
+        banana_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Banana_tile.tscn");
+        mountain_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Mountain_tile.tscn");
+        player = (PackedScene)ResourceLoader.Load("res://Scenes/Player.tscn");
 
+        playerTurn = 0;
+		GD.Print("Player:", playerTurn, " is playing");
+        player0 = player.Instance<Player>();
+        AddChild(player0);
+        player1 = player.Instance<Player>();
+        AddChild(player1);
+        playerList = new List<Player>
+    {
+        player0,
+        player1
+    };
 
-		//Get audio player
-		audioStreamPlayer = (AudioStreamPlayer)GetNode("AudioStreamPlayer");
+        //Get audio player
+        audioStreamPlayer = (AudioStreamPlayer)GetNode("AudioStreamPlayer");
 		
 		spawnTile("empty_tile", 0, 0);
-		spawnTile("empty_tile", -3, -4);
-		spawnTile("empty_tile", 5, 2);
-
 	}
 	//Checks if the position in hex-coordinates contains a tile
 	public bool posHasTile(int xHex, int zHex)
@@ -68,7 +89,9 @@ public class Game_board : Spatial
 					newTile.zHex = zHex;
 					newTile.Translation = new Vector3(position.x, 0, position.z);
 					AddChild(newTile);
-					break;
+                    playerList[playerTurn].ownedFarms.Add((xHex, zHex));
+                    GD.Print("Ownes ", playerList[playerTurn].ownedFarms.Count, " farm(s)");
+                    break;
 					
 				case "rice_farm_tile":
 					occupiedPositions.Add((xHex, zHex), "rice_farm_tile");
@@ -77,7 +100,9 @@ public class Game_board : Spatial
 					newTile.zHex = zHex;
 					newTile.Translation = new Vector3(position.x, 0, position.z);
 					AddChild(newTile);
-					break;
+                    playerList[playerTurn].ownedFarms.Add((xHex, zHex));
+                    GD.Print("Ownes ", playerList[playerTurn].ownedFarms.Count, " farm(s)");
+                    break;
 				case "rice_tile":
 					occupiedPositions.Add((xHex, zHex), "rice_tile");
 					newTile = rice_tile.Instance<Rice_tile>();
@@ -86,7 +111,15 @@ public class Game_board : Spatial
 					newTile.Translation = new Vector3(position.x, 0, position.z);
 					AddChild(newTile);
 					break;
-				case "mountain_tile":
+                case "banana_tile":
+                    occupiedPositions.Add((xHex, zHex), "banana_tile");
+                    newTile = banana_tile.Instance<Banana_tile>();
+                    newTile.xHex = xHex;
+                    newTile.zHex = zHex;
+                    newTile.Translation = new Vector3(position.x, 0, position.z);
+                    AddChild(newTile);
+                    break;
+                case "mountain_tile":
 					occupiedPositions.Add((xHex, zHex), "mountain_tile");
 					newTile = mountain_tile.Instance<Mountain_tile>();
 					newTile.xHex = xHex;
@@ -106,6 +139,8 @@ public class Game_board : Spatial
 		string spawn_tile_type = "banana_farm_tile";
 		//Random number to decide which tile wil be spawned
 		int random_number = new Random().Next(0, 101);
+		// player is defined
+		
 
 		if(random_number <= 10)
 		{
@@ -115,7 +150,15 @@ public class Game_board : Spatial
 		{
 			spawn_tile_type = "mountain_tile";
 		}
-		if(20 < random_number)
+        if (20 < random_number && random_number <= 30)
+        {
+            spawn_tile_type = "rice_farm_tile";
+        }
+        if (30 < random_number && random_number <= 60)
+        {
+            spawn_tile_type = "banana_tile";
+        }
+        if (60 < random_number)
 		{
 			spawn_tile_type = "rice_tile";
 		}
@@ -130,11 +173,11 @@ public class Game_board : Spatial
 			spawnTile("empty_tile", xHex - 1, zHex + 1);
 			spawnTile("empty_tile", xHex - 1, zHex - 1);
 		}
-        else // oneven rij
-        {
-            spawnTile("empty_tile", xHex + 1, zHex + 1);
-            spawnTile("empty_tile", xHex + 1, zHex - 1);
-        }
+		else // oneven rij
+		{
+			spawnTile("empty_tile", xHex + 1, zHex + 1);
+			spawnTile("empty_tile", xHex + 1, zHex - 1);
+		}
 
 
 		spawnTile("empty_tile", xHex, zHex + 1);
@@ -145,44 +188,212 @@ public class Game_board : Spatial
 	
 	public Vector3 hex_coordinates(int xHex, int zHex)
 	{
-        float xPos = 2 * xHex * tileApothem + (Math.Sign(zHex) * zHex) % 2 * tileApothem;
+		float xPos = 2 * xHex * tileApothem + (Math.Sign(zHex) * zHex) % 2 * tileApothem;
 		float yPos = 0;
 		float zPos = 1.5f * zHex * tileHeight;
 		return new Vector3(xPos, yPos, zPos);
 	}
-
-
-
-
-
-	// Work in progress
-	/*public int count_field_size(int xHex, int yHex)
+	public int count_field_size(int xHex, int zHex)
 	{
-		if(occupiedPositions.ContainsKey((xHex, yHex)))
+		// counts the field size of the position and returns it as an int
+		string tileTipe;
+		string fieldTipe = "None";
+
+		// checks type of tile
+		if (occupiedPositions.ContainsKey((xHex, zHex)))
 		{
-            string tileTipe = occupiedPositions[(xHex, yHex)];
-			GD.Print("Count tiles around: ", tileTipe);
-        }
+			tileTipe = occupiedPositions[(xHex, zHex)];
+		}
 		else
 		{
-            GD.Print("Error: No tile on this position to check field size");
-        }
+			GD.Print("Error: No tile on this position to check field size");
+			return 0;
+		}
 
-        switch (tileTipe)
+		// checks type of point tiles
+		switch (tileTipe)
 		{
-			case "Banana_farm_tile":
-				string fieldTipe = "Banana_tile";
+			case "banana_farm_tile":
+				fieldTipe = "banana_tile";
+
 				break;
-            case "Rice_farm_tile":
-                string fieldTipe = "Rice_tile";
+			case "rice_farm_tile":
+				fieldTipe = "rice_tile";
 				break;
-        }
-        return 0;
+		}
+
+		if (fieldTipe == "None")
+		{
+			GD.Print("Error: This tile is not a defined farm");
+		}
+
+        List<(int, int)> visitedFarms = new List<(int, int)>
+		{
+			(xHex,zHex)
+		};
+		visitedFields = new List<(int, int)>();
+        backtrackingFieldCount(xHex, zHex, fieldTipe, tileTipe, visitedFields, visitedFarms);
+		int fieldSize = visitedFields.Count;
+		GD.Print("Fieldsize = ", fieldSize);
+		return fieldSize;
 	}
-	*/
+
+	public void backtrackingFieldCount(int xHex, int zHex, string fieldTipe, string tileTipe, List<(int, int)> visitedFields, List<(int, int)> visitedFarms)
+	{
+		// Backtracking algoritm that counts adjecent fields
+
+		if (occupiedPositions[(xHex,zHex)] == fieldTipe && !visitedFields.Contains((xHex, zHex)))
+		{
+			//GD.Print("field ",fieldCounter, " New field on tile: ", (xHex, zHex));
+			visitedFields.Add((xHex, zHex));
+		}
+
+        List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
+		for (int i = 0; i < 6; i++)
+		{
+			if (fieldTipe == occupiedPositions[surrounding_positions[i]] & !visitedFields.Contains(surrounding_positions[i]))
+			{
+				backtrackingFieldCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, fieldTipe, tileTipe, visitedFields, visitedFarms);
+			}
+			else
+			{
+				if(tileTipe == occupiedPositions[surrounding_positions[i]] & !visitedFarms.Contains(surrounding_positions[i]))
+				{
+					visitedFarms.Add(surrounding_positions[i]);
+                    Player farmOwner = playerList[0]; // assigned to avoid errors but will always be updated in while loop to correct owner
+                    bool farmOwner_found = false;
+					int j = 0;
+                    while (j < playerList.Count & !farmOwner_found)
+                    {
+                        if (playerList[j].ownedFarms.Contains(surrounding_positions[i]))
+                        {
+                            farmOwner = playerList[j];
+                            farmOwner_found = true;
+                        }
+						j++;
+                    }
+					if (farmOwner_found)
+					{
+						farmOwner.ownedFarms.Remove(surrounding_positions[i]);
+						GD.Print("Player: ",playerList.IndexOf(farmOwner) , " lost its ", occupiedPositions[surrounding_positions[i]]);
+					}
+				}
+			}
 
 
+        }
+	}
+	public void check_finished_fields(int xHex, int zHex)
+	{
+        string tileTipeAdjacentTtile = "None";
+		int fieldsize;
+		bool adjacentFarmFound = false;
+		bool unfinishedFarm = false;
+        List<(int, int)> possibleFarmPositions= adjacent_tiles(xHex, zHex);
+        List<(int, int)> adjacentTilesOfAdjacentFarm;
 
 
+        for (int i = 0; i<6; i++)
+		{
+			adjacentFarmFound = false;
+            unfinishedFarm = false;
+            if (occupiedPositions.ContainsKey(possibleFarmPositions[i]))
+            {
+                tileTipeAdjacentTtile = occupiedPositions[possibleFarmPositions[i]];
+            }
+            else
+            {
+                GD.Print("Error: check_finished_fields wants tileTipe of not existing tile");
+            }
+			// finding adjacent farm
+            switch (tileTipeAdjacentTtile)
+            {
+                case "banana_farm_tile":
+					adjacentFarmFound = true;
+                    break;
+                case "rice_farm_tile":
+                    adjacentFarmFound = true;
+                    break;
+            }
+			// checking if it is surrounded and than counting fieldsize
+			adjacentTilesOfAdjacentFarm = adjacent_tiles(possibleFarmPositions[i].Item1, possibleFarmPositions[i].Item2);
+			if (adjacentFarmFound)
+			{
+				int j = 0;
+				while (j<6 & !unfinishedFarm)
+				{
+					if(occupiedPositions[adjacentTilesOfAdjacentFarm[j]] == "empty_tile")
+					{
+						unfinishedFarm= true;
+					}
+					j++;
+				}
+				if (!unfinishedFarm)
+				{
+					Player farmOwner = playerList[0]; // assigned to avoid errors but will always be updated in while loop to correct owner
+					bool farmOwner_found = false;
+                    int k = 0;
+                    while (k < playerList.Count & !farmOwner_found)
+                    {
+                        if (playerList[k].ownedFarms.Contains(possibleFarmPositions[i]))
+                        {
+                            farmOwner = playerList[k];
+                            farmOwner_found = true;
+                        }
+                        k++;
+                    }
+                    if (farmOwner_found)
+					{
+						GD.Print("Found finished farm! Of type: ", tileTipeAdjacentTtile, " from player ", playerList.IndexOf(farmOwner));
+						fieldsize = count_field_size(possibleFarmPositions[i].Item1, possibleFarmPositions[i].Item2);
+						farmOwner.score += fieldsize;
+						farmOwner.ownedFarms.Remove(possibleFarmPositions[i]);
+						GD.Print("Total score of player ",playerList.IndexOf(farmOwner), " = ", farmOwner.score, " points");
+					}
+					else
+					{
+						GD.Print("Nobody owns this fished farm");
+					}
+				
+				}
+			}
+        }
+
+    }
+
+    public List<(int, int)> adjacent_tiles (int xHex, int zHex)
+		{
+		// list of possible positions next to current tile in tuple of hex coordinates
+		List<(int, int)> surrounding_positions = new List<(int, int)>(6);
+		surrounding_positions.Add((1 + xHex, zHex + 0));
+        surrounding_positions.Add((-1 + xHex, zHex + 0));
+        surrounding_positions.Add((0 + xHex, zHex + 1));
+        surrounding_positions.Add((0 + xHex, zHex + -1));
+        if ((Math.Sign(zHex)* zHex) % 2 == 0) // even rij
+			{
+				surrounding_positions.Add((-1 + xHex, zHex + 1));
+				surrounding_positions.Add((-1 + xHex, zHex + -1));
+			}
+		else // oneven rij
+			{
+			surrounding_positions.Add((1 + xHex, zHex + 1));
+			surrounding_positions.Add((1 + xHex, zHex + -1));
+			}
+		return surrounding_positions;
+		}
+
+
+	public void next_player()
+	{
+		// changes playerturn to next player
+		if(playerTurn == playerList.Count - 1)
+		{
+			playerTurn = 0;
+		}
+		else
+		{
+			playerTurn++;
+		}
+	}
 
 }

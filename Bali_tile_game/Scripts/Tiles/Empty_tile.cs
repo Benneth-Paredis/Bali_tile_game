@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using static Game_board;
 
 public class Empty_tile : Tile
 {
@@ -35,13 +36,25 @@ public class Empty_tile : Tile
 			{
 				game_board.click_empty_tile(this.xHex, this.zHex);
 				QueueFree();
-			}
-			//Right mouse button click
-			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 2)
+				game_board.check_finished_fields(this.xHex,this.zHex);
+				game_board.next_player();
+                GD.Print("");
+                GD.Print("Player: ", game_board.playerTurn, " is playing");
+
+				
+				/*foreach((int xHex, int zHex) in game_board.playerList[game_board.playerTurn].ownedFarms)
+				{
+                    GD.Print("Position: ", (xHex,zHex), " Type: ", game_board.occupiedPositions[(xHex, zHex)]);
+                }
+                GD.Print("");
+				*/
+            }
+            //Right mouse button click
+            if (inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 2)
 			{
 				GD.Print("Right mouse button click");
-                game_board.occupiedPositions.Remove((this.xHex, this.zHex));
-                QueueFree();
+				game_board.occupiedPositions.Remove((this.xHex, this.zHex));
+				QueueFree();
 			}
 		}
 	}
