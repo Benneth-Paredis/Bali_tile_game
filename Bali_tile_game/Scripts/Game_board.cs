@@ -259,6 +259,7 @@ public class Game_board : Spatial
                         // check if the whole farm is surrounded
                         int j = 0;
                         bool wholeFarmSurrounded = true;
+                        
                         while (j < farmsize & wholeFarmSurrounded)
                         {
                             wholeFarmSurrounded = surroundedFarm(ownedFarms[j].Item1, ownedFarms[j].Item2);
@@ -359,35 +360,36 @@ public class Game_board : Spatial
         List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
         for (int i = 0; i < 6; i++)
         {
-            if (fieldTipe == occupiedPositions[surrounding_positions[i]] & !visitedFields.Contains(surrounding_positions[i]))
+            if (occupiedPositions.ContainsKey(surrounding_positions[i]))
             {
-                backtrackingFieldCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, fieldTipe, tileTipe, visitedFields, visitedFarms);
-            }
-            else
-            {
-                if (tileTipe == occupiedPositions[surrounding_positions[i]] & !visitedFarms.Contains(surrounding_positions[i]))
+                if (fieldTipe == occupiedPositions[surrounding_positions[i]] & !visitedFields.Contains(surrounding_positions[i]))
                 {
-                    Player farmOwner = playerList[0]; // assigned to avoid errors but will always be updated in while loop to correct owner
-                    bool farmOwner_found = false;
-                    int j = 0;
-                    while (j < playerList.Count & !farmOwner_found)
+                    backtrackingFieldCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, fieldTipe, tileTipe, visitedFields, visitedFarms);
+                }
+                else
+                {
+                    if (tileTipe == occupiedPositions[surrounding_positions[i]] & !visitedFarms.Contains(surrounding_positions[i]))
                     {
-                        if (playerList[j].ownedFarms.Contains(surrounding_positions[i]))
+                        Player farmOwner = playerList[0]; // assigned to avoid errors but will always be updated in while loop to correct owner
+                        bool farmOwner_found = false;
+                        int j = 0;
+                        while (j < playerList.Count & !farmOwner_found)
                         {
-                            farmOwner = playerList[j];
-                            farmOwner_found = true;
+                            if (playerList[j].ownedFarms.Contains(surrounding_positions[i]))
+                            {
+                                farmOwner = playerList[j];
+                                farmOwner_found = true;
+                            }
+                            j++;
                         }
-                        j++;
-                    }
-                    if (farmOwner_found)
-                    {
-                        farmOwner.ownedFarms.Remove(surrounding_positions[i]);
-                        GD.Print("Player: ", playerList.IndexOf(farmOwner), " lost its ", occupiedPositions[surrounding_positions[i]]);
+                        if (farmOwner_found)
+                        {
+                            farmOwner.ownedFarms.Remove(surrounding_positions[i]);
+                            GD.Print("Player: ", playerList.IndexOf(farmOwner), " lost its ", occupiedPositions[surrounding_positions[i]]);
+                        }
                     }
                 }
             }
-
-
         }
     }
     public void backtrackingFarmCount(int xHex, int zHex, string tileTipe, List<(int, int)> ownedFarms, Player farmer)
@@ -419,9 +421,13 @@ public class Game_board : Spatial
         List<(int, int)> surrounding_positions = adjacent_tiles(xHex, zHex);
         for (int i = 0; i < 6; i++)
         {
-            if (tileTipe == occupiedPositions[surrounding_positions[i]] & !ownedFarms.Contains(surrounding_positions[i]))
+            if (occupiedPositions.ContainsKey(surrounding_positions[i]))
             {
-                backtrackingFarmCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, tileTipe, ownedFarms, farmer);
+
+                if (tileTipe == occupiedPositions[surrounding_positions[i]] & !ownedFarms.Contains(surrounding_positions[i]))
+                {
+                    backtrackingFarmCount(surrounding_positions[i].Item1, surrounding_positions[i].Item2, tileTipe, ownedFarms, farmer);
+                }
             }
         }
     }
@@ -433,18 +439,14 @@ public class Game_board : Spatial
             int j = 0;
             while (j < 6 & !unfinishedFarm)
             {
-                if (occupiedPositions.ContainsKey((xHex, zHex)))
+                if (occupiedPositions.ContainsKey(adjacentTiles[j]))
                 {                
                     if (occupiedPositions[adjacentTiles[j]] == "empty_tile")
                     {
                         unfinishedFarm = true;
                     }
-                    j++;
                 }
-                else
-                {
-                    unfinishedFarm = true;
-                }
+                j++;
             }
         return !unfinishedFarm;
         }
