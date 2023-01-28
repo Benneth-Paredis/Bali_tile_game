@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Main.cs" type="Script" id=1]
+[ext_resource path="res://TextFonds/Score_font_kohelet.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/Game_board.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Ocean.tscn" type="PackedScene" id=4]
 [ext_resource path="res://default_env.tres" type="Environment" id=5]
@@ -19,3 +20,27 @@ environment = ExtResource( 5 )
 transform = Transform( 0.866025, 0.353553, -0.353553, 0, 0.707107, 0.707107, 0.5, -0.612372, 0.612372, -10, 25, 15 )
 
 [node name="game_board" parent="." instance=ExtResource( 3 )]
+
+[node name="UserInterface" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Test_score" type="Label" parent="UserInterface"]
+margin_left = 354.0
+margin_top = 52.0
+margin_right = 753.0
+margin_bottom = 97.0
+custom_fonts/font = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": "
+"
+}
+
+[node name="Score" type="RichTextLabel" parent="UserInterface"]
+margin_left = 71.0
+margin_top = 136.0
+margin_right = 501.0
+margin_bottom = 560.0
+custom_fonts/normal_font = ExtResource( 2 )
+text = "TEST player: 0 score: 4
+"

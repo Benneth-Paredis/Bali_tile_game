@@ -22,6 +22,8 @@ public class Game_board : Spatial
     public int playerTurn;
     public List<Player> playerList;
 
+    Main main;
+
 
     AudioStreamPlayer audioStreamPlayer;
 
@@ -30,6 +32,8 @@ public class Game_board : Spatial
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        main = (Main)GetParent();
+
         //Get all tile scenes
         emptyTile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Empty_tile.tscn");
         banana_farm_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Banana_farm_tile.tscn");
@@ -38,7 +42,7 @@ public class Game_board : Spatial
         banana_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Banana_tile.tscn");
         mountain_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Mountain_tile.tscn");
         player = (PackedScene)ResourceLoader.Load("res://Scenes/Player.tscn");
-
+        
         playerTurn = 0;
         GD.Print("Player:", playerTurn, " is playing");
         player0 = player.Instance<Player>();
@@ -273,15 +277,13 @@ public class Game_board : Spatial
                             {
                                 count_field_size(farmPosition.Item1, farmPosition.Item2, ownedFarms, visitedFields);
                             }
-                            int fieldSize = visitedFields.Count;                             
-                            farmOwner.score += fieldSize * farmsize;
+                            int fieldSize = visitedFields.Count;
+                            GD.Print("Field size: ", fieldSize);
+                            add_player_score(farmOwner, fieldSize * farmsize);
                             foreach((int,int) finishedFarm in ownedFarms)
                             {
                                 farmOwner.ownedFarms.Remove(finishedFarm);
-                            }
-                            GD.Print("Field size: ", fieldSize);
-                            GD.Print("Gained points: ", fieldSize * farmsize);
-                            GD.Print("Total score of player ", playerList.IndexOf(farmOwner), " = ", farmOwner.score, " points");
+                            }                                                     
                         }
                     }
                     else
@@ -450,7 +452,12 @@ public class Game_board : Spatial
             }
         return !unfinishedFarm;
         }
-
+    public void add_player_score(Player player, int score)
+    {
+        player.score += score;
+        GD.Print("Gained points: ", score);
+        GD.Print("Total score of player ", playerList.IndexOf(player), " = ", player.score, " points");
+    }
     public List<(int, int)> adjacent_tiles(int xHex, int zHex)
     {
         // list of possible positions next to current tile in tuple of hex coordinates
@@ -482,6 +489,8 @@ public class Game_board : Spatial
         {
             playerTurn++;
         }
+
+        main.display_updated_score();
     }
 
 }
