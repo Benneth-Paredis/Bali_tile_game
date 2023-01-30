@@ -25,22 +25,19 @@ transform = Transform( 0.866025, 0.353553, -0.353553, 0, 0.707107, 0.707107, 0.5
 margin_right = 40.0
 margin_bottom = 40.0
 
-[node name="Test_score" type="Label" parent="UserInterface"]
-margin_left = 354.0
-margin_top = 52.0
-margin_right = 753.0
-margin_bottom = 97.0
-custom_fonts/font = ExtResource( 2 )
-__meta__ = {
-"_editor_description_": "
-"
-}
-
 [node name="Score" type="RichTextLabel" parent="UserInterface"]
-margin_left = 71.0
-margin_top = 136.0
-margin_right = 501.0
-margin_bottom = 560.0
+margin_left = 70.0
+margin_top = 130.0
+margin_right = 370.0
+margin_bottom = 370.0
+rect_clip_content = false
 custom_fonts/normal_font = ExtResource( 2 )
-text = "TEST player: 0 score: 4
-"
+bbcode_enabled = true
+bbcode_text = "TEST: Score
+
+Player 0: 3 points
+Player 1: 5 points"
+text = "TEST: Score
+
+Player 0: 3 points
+Player 1: 5 points"

@@ -457,6 +457,7 @@ public class Game_board : Spatial
         player.score += score;
         GD.Print("Gained points: ", score);
         GD.Print("Total score of player ", playerList.IndexOf(player), " = ", player.score, " points");
+        main.display_point_scored(player, score);
     }
     public List<(int, int)> adjacent_tiles(int xHex, int zHex)
     {
