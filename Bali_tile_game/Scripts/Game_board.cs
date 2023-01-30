@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Runtime.ConstrainedExecution;
 
@@ -21,7 +22,9 @@ public class Game_board : Spatial
     public List<(int, int)> visitedFields = new List<(int, int)>();
     public int playerTurn;
     public List<Player> playerList;
-
+    public List<List<string>> playersTileOptions = new List<List<string>>();
+    public bool tyleSelected = false;
+    public string selectedTyle;
     Main main;
 
 
@@ -43,17 +46,44 @@ public class Game_board : Spatial
         mountain_tile = (PackedScene)ResourceLoader.Load("res://Scenes/Tiles/Mountain_tile.tscn");
         player = (PackedScene)ResourceLoader.Load("res://Scenes/Player.tscn");
         
-        playerTurn = 0;
-        GD.Print("Player:", playerTurn, " is playing");
+
+        // adding players
         player0 = player.Instance<Player>();
         AddChild(player0);
         player1 = player.Instance<Player>();
         AddChild(player1);
         playerList = new List<Player>
-    {
-        player0,
-        player1
-    };
+        {
+            player0,
+            player1
+        };
+
+        // giving 3 tiles to choose out per player
+        GD.Print("Tiles per player: ");
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            List<string> innerList = new List<string>();
+            for (int j = 0; j < 3; j++)
+            {
+                innerList.Add(new_random_tyle());
+            }
+            playersTileOptions.Add(innerList);
+        }
+
+        // printing the result
+        foreach (var innerList in playersTileOptions)
+        {
+            GD.Print("");
+            foreach (string str in innerList)
+            {
+                GD.Print(str + " ");
+            }
+            
+        }
+
+        // initialising turns
+        playerTurn = 0;
+        GD.Print("Player:", playerTurn, " is playing");
 
         //Get audio player
         audioStreamPlayer = (AudioStreamPlayer)GetNode("AudioStreamPlayer");
@@ -135,38 +165,10 @@ public class Game_board : Spatial
         }
     }
 
-    public void click_empty_tile(int xHex, int zHex)
+    public void click_empty_tile(int xHex, int zHex, string spawn_tile_type)
     {
         //Remove the empty tile from the occupied positions
         occupiedPositions.Remove((xHex, zHex));
-        //Type of tile that will be spawned
-        string spawn_tile_type = "banana_farm_tile";
-        //Random number to decide which tile wil be spawned
-        int random_number = new Random().Next(0, 101);
-        // player is defined
-
-
-        if (random_number <= 20)
-        {
-            spawn_tile_type = "banana_farm_tile";
-        }
-        if (20 < random_number && random_number <= 30)
-        {
-            spawn_tile_type = "mountain_tile";
-        }
-        if (30 < random_number && random_number <= 50)
-        {
-            spawn_tile_type = "rice_farm_tile";
-        }
-        if (50 < random_number && random_number <= 75)
-        {
-            spawn_tile_type = "banana_tile";
-        }
-        if (75 < random_number)
-        {
-            spawn_tile_type = "rice_tile";
-        }
-
         spawnTile(spawn_tile_type, xHex, zHex);
 
         spawnTile("empty_tile", xHex + 1, zHex);
@@ -189,7 +191,39 @@ public class Game_board : Spatial
 
         audioStreamPlayer.Play();
     }
+    
+    public string new_random_tyle()
+    {
+        string spawn_tile_type = "";
+        //Random number to decide which tile wil be spawned
+        int random_number = new Random().Next(0, 101);
 
+        if (random_number <= 20)
+        {
+            spawn_tile_type = "banana_farm_tile";
+        }
+        if (20 < random_number && random_number <= 30)
+        {
+            spawn_tile_type = "mountain_tile";
+        }
+        if (30 < random_number && random_number <= 50)
+        {
+            spawn_tile_type = "rice_farm_tile";
+        }
+        if (50 < random_number && random_number <= 75)
+        {
+            spawn_tile_type = "banana_tile";
+        }
+        if (75 < random_number)
+        {
+            spawn_tile_type = "rice_tile";
+        }
+        if (spawn_tile_type == "")
+        {
+            GD.Print("Error in chosing tiletype in function: new_tyle_option_in_menu()");
+        }
+        return spawn_tile_type;
+    }
     public Vector3 hex_coordinates(int xHex, int zHex)
     {
         float xPos = 2 * xHex * tileApothem + (Math.Sign(zHex) * zHex) % 2 * tileApothem;
@@ -481,6 +515,9 @@ public class Game_board : Spatial
     }
     public void next_player()
     {
+        // give player new tile
+
+        playersTileOptions[playerTurn][playersTileOptions[playerTurn].IndexOf(selectedTyle)] = new_random_tyle();
         // changes playerturn to next player
         if (playerTurn == playerList.Count - 1)
         {
@@ -491,7 +528,14 @@ public class Game_board : Spatial
             playerTurn++;
         }
 
-        main.display_updated_score();
-    }
+        // setting variables to initial value
+        tyleSelected= false;
+        selectedTyle = "";
 
+        // displaying result
+        main.display_updated_score();
+        main.display_tyle_selection_menu();
+        
+    }
+    
 }

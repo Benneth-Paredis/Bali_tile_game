@@ -10,6 +10,7 @@ public class Main : Spatial
     RichTextLabel score_display;
     String temporary_score_display;
     PackedScene extra_points_display_scene;
+    Tyle_selection_menu tyle_selction_menu;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -17,7 +18,10 @@ public class Main : Spatial
         game_board = GetNode<Game_board>("/root/Main_scene/game_board");
         score_display = GetNode<RichTextLabel>("/root/Main_scene/UserInterface/Score");
         extra_points_display_scene = (PackedScene)ResourceLoader.Load("res://Scenes/Extra_points_display.tscn");
+        tyle_selction_menu = GetNode<Tyle_selection_menu>("Tyle_selection_menu");
+        // display start
         display_updated_score();
+        display_tyle_selection_menu();
     }
 
     public void display_updated_score()
@@ -57,5 +61,14 @@ public class Main : Spatial
             temporary_score_display += "\n";
         }
         extra_points_display.AppendBbcode(temporary_score_display);
+    }
+
+    public void display_tyle_selection_menu()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            Button button = GetNode<Button>("Tyle_selection_menu/VBoxContainer/" + i);
+            button.Text = game_board.playersTileOptions[game_board.playerTurn][i];
+        }
     }
 }
