@@ -16,8 +16,11 @@ public class Game_board : Spatial
     PackedScene player;
 
     float tileHeight = 1;
+
     Player player0;
     Player player1;
+    Player player2;
+
     public Dictionary<(int, int), string> occupiedPositions = new Dictionary<(int, int), string>(); // The dictionary consists of a position tuple (x,z) and a string of the type
     public List<(int, int)> visitedFields = new List<(int, int)>();
     public int playerTurn;
@@ -52,10 +55,13 @@ public class Game_board : Spatial
         AddChild(player0);
         player1 = player.Instance<Player>();
         AddChild(player1);
+        player2 = player.Instance<Player>();
+        AddChild(player2);
         playerList = new List<Player>
         {
             player0,
-            player1
+            player1,
+            player2
         };
 
         // giving 3 tiles to choose out per player
