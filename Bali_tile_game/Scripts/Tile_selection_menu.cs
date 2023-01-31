@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Tyle_selection_menu : Control
+public class Tile_selection_menu : Control
 {
     // Declare member variables here. Examples:
     // private int a = 2;

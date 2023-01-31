@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public class Button_tyle : Button
+public class Button_tile : Button
 {
-    public string tyleType;
+    public string tileType;
     Game_board game_board;
 
     // Called when the node enters the scene tree for the first time.
@@ -14,9 +14,9 @@ public class Button_tyle : Button
     }
     public void _on_button_up()
     {
-        game_board.selectedTyle = game_board.playersTileOptions[game_board.playerTurn][int.Parse(this.GetName())];
-        game_board.tyleSelected = true;
-        GD.Print("selected: ", game_board.selectedTyle);
+        game_board.selectedTile = game_board.playersTileOptions[game_board.playerTurn][int.Parse(this.GetName())];
+        game_board.tileSelected = true;
+        GD.Print("selected: ", game_board.selectedTile);
     }
     
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

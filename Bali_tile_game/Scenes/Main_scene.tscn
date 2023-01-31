@@ -6,7 +6,7 @@
 [ext_resource path="res://Scenes/Ocean.tscn" type="PackedScene" id=4]
 [ext_resource path="res://default_env.tres" type="Environment" id=5]
 [ext_resource path="res://Scenes/Selection_menu.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Scripts/Tyle_selection_menu.cs" type="Script" id=7]
+[ext_resource path="res://Scripts/Tile_selection_menu.cs" type="Script" id=7]
 
 [node name="Main_scene" type="Spatial"]
 script = ExtResource( 1 )
@@ -49,5 +49,5 @@ text = "TEST: Score
 Player 0: 3 points
 Player 1: 5 points"
 
-[node name="Tyle_selection_menu" parent="." instance=ExtResource( 6 )]
+[node name="Tile_selection_menu" parent="." instance=ExtResource( 6 )]
 script = ExtResource( 7 )

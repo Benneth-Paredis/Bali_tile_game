@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 
 
-public class No_tyle_selected_display : Control
+public class No_tile_selected_display : Control
 {
     bool animationPlayed = false;
 

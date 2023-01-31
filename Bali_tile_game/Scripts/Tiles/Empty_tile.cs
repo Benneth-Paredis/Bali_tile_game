@@ -6,7 +6,7 @@ public class Empty_tile : Tile
 {
 
 	Tween tween;
-    PackedScene no_tyle_selected_display;
+    PackedScene no_tile_selected_display;
 	Main main;
 
     Random random = new Random();
@@ -16,7 +16,7 @@ public class Empty_tile : Tile
 	public override void _Ready()
 	{
 		game_board = (Game_board)GetParent();
-        no_tyle_selected_display = (PackedScene)ResourceLoader.Load("res://Scenes/No_tile_selected.tscn");
+        no_tile_selected_display = (PackedScene)ResourceLoader.Load("res://Scenes/No_tile_selected.tscn");
 		main = GetNode<Main>("/root/Main_scene");
 
         //Random time for the rise animation
@@ -37,9 +37,9 @@ public class Empty_tile : Tile
 			//Left mouse button click
 			if(inputEventMouseButton.Pressed == true && inputEventMouseButton.ButtonIndex == 1)
 			{
-				if (game_board.tyleSelected)
+				if (game_board.tileSelected)
 				{
-					String spawn_tile_type = game_board.selectedTyle;
+					String spawn_tile_type = game_board.selectedTile;
 
 					game_board.click_empty_tile(this.xHex, this.zHex, spawn_tile_type);
 					QueueFree();
@@ -51,9 +51,9 @@ public class Empty_tile : Tile
 				}
 				else
 				{
-                    Control extra_points_display_child = no_tyle_selected_display.Instance<Control>();
+                    Control extra_points_display_child = no_tile_selected_display.Instance<Control>();
                     main.AddChild(extra_points_display_child);
-                    GD.Print("No tyle selected");
+                    GD.Print("No tile selected");
 				}
             }
             //Right mouse button click

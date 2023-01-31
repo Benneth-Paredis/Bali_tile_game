@@ -19,15 +19,15 @@ public class Game_board : Spatial
 
     Player player0;
     Player player1;
-    Player player2;
+    //Player player2;
 
     public Dictionary<(int, int), string> occupiedPositions = new Dictionary<(int, int), string>(); // The dictionary consists of a position tuple (x,z) and a string of the type
     public List<(int, int)> visitedFields = new List<(int, int)>();
     public int playerTurn;
     public List<Player> playerList;
     public List<List<string>> playersTileOptions = new List<List<string>>();
-    public bool tyleSelected = false;
-    public string selectedTyle;
+    public bool tileSelected = false;
+    public string selectedTile;
     Main main;
 
 
@@ -55,13 +55,13 @@ public class Game_board : Spatial
         AddChild(player0);
         player1 = player.Instance<Player>();
         AddChild(player1);
-        player2 = player.Instance<Player>();
-        AddChild(player2);
+        //player2 = player.Instance<Player>();
+        //AddChild(player2);
         playerList = new List<Player>
         {
             player0,
             player1,
-            player2
+            //player2
         };
 
         // giving 3 tiles to choose out per player
@@ -71,7 +71,7 @@ public class Game_board : Spatial
             List<string> innerList = new List<string>();
             for (int j = 0; j < 3; j++)
             {
-                innerList.Add(new_random_tyle());
+                innerList.Add(new_random_tile());
             }
             playersTileOptions.Add(innerList);
         }
@@ -198,35 +198,35 @@ public class Game_board : Spatial
         audioStreamPlayer.Play();
     }
     
-    public string new_random_tyle()
+    public string new_random_tile()
     {
         string spawn_tile_type = "";
         //Random number to decide which tile wil be spawned
         int random_number = new Random().Next(0, 101);
 
-        if (random_number <= 20)
+        if (random_number <= 15)
         {
             spawn_tile_type = "banana_farm_tile";
         }
-        if (20 < random_number && random_number <= 30)
+        if (15 < random_number && random_number <= 25)
         {
             spawn_tile_type = "mountain_tile";
         }
-        if (30 < random_number && random_number <= 50)
+        if (25 < random_number && random_number <= 40)
         {
             spawn_tile_type = "rice_farm_tile";
         }
-        if (50 < random_number && random_number <= 75)
+        if (40 < random_number && random_number <= 70)
         {
             spawn_tile_type = "banana_tile";
         }
-        if (75 < random_number)
+        if (70 < random_number)
         {
             spawn_tile_type = "rice_tile";
         }
         if (spawn_tile_type == "")
         {
-            GD.Print("Error in chosing tiletype in function: new_tyle_option_in_menu()");
+            GD.Print("Error in chosing tiletype in function: new_tile_option_in_menu()");
         }
         return spawn_tile_type;
     }
@@ -523,7 +523,7 @@ public class Game_board : Spatial
     {
         // give player new tile
 
-        playersTileOptions[playerTurn][playersTileOptions[playerTurn].IndexOf(selectedTyle)] = new_random_tyle();
+        playersTileOptions[playerTurn][playersTileOptions[playerTurn].IndexOf(selectedTile)] = new_random_tile();
         // changes playerturn to next player
         if (playerTurn == playerList.Count - 1)
         {
@@ -535,12 +535,12 @@ public class Game_board : Spatial
         }
 
         // setting variables to initial value
-        tyleSelected= false;
-        selectedTyle = "";
+        tileSelected= false;
+        selectedTile = "";
 
         // displaying result
         main.display_updated_score();
-        main.display_tyle_selection_menu();
+        main.display_tile_selection_menu();
         
     }
     
